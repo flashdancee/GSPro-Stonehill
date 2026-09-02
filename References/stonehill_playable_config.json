@@ -1,0 +1,57 @@
+{
+  "courseName": "Stonehill Golf Club",
+  "location": "Sudbury, Ontario, Canada",
+  "prototypeScope": "Holes 1-2",
+  "teeSets": [
+    {
+      "name": "White",
+      "color": "#FFFFFF",
+      "role": "primary",
+      "sourceTeeAlias": "Blue/Championship"
+    },
+    {
+      "name": "Red",
+      "color": "#C8202F",
+      "role": "forward",
+      "sourceTeeAlias": "Red"
+    }
+  ],
+  "holes": [
+    {
+      "number": 1,
+      "par": 5,
+      "handicap": 1,
+      "routing": "upper hole, right to left",
+      "teeSide": "right/east",
+      "greenSide": "left/west",
+      "tees": {
+        "White": 516,
+        "Red": 476
+      }
+    },
+    {
+      "number": 2,
+      "par": 4,
+      "handicap": 3,
+      "routing": "lower hole, left to right",
+      "teeSide": "left/west",
+      "greenSide": "right/east",
+      "tees": {
+        "White": 344,
+        "Red": 306
+      }
+    }
+  ],
+  "units": "yards",
+  "notes": [
+    "The long Stonehill tee is published as Blue/Championship by available scorecard sources but is intentionally exposed as White in this GSPro course at the user's request.",
+    "Tee markers will be positioned from the aerial imagery and adjusted along each hole centerline to reproduce the target playing distances.",
+    "No course photographs or physical scorecard are required for the initial playable prototype.",
+    "The user visually confirmed Hole 1 as the upper right-to-left hole and Hole 2 as the lower left-to-right hole."
+  ],
+  "sources": [
+    "https://golfsudbury.com/stonehill-golf-club/scorecard/",
+    "https://www.golfcanada.ca/golf-facility/stonehill-golf-club-en/",
+    "https://www.golfify.io/courses/stone-hill-golf-course"
+  ]
+}

@@ -1,0 +1,209 @@
+param(
+    [Parameter(Mandatory = $true)][string]$ScenePath,
+    [Parameter(Mandatory = $true)][string]$TemplateCourseDirectory,
+    [Parameter(Mandatory = $true)][string]$BundlePath,
+    [Parameter(Mandatory = $true)][string]$TopImagePath,
+    [Parameter(Mandatory = $true)][string]$OutputDirectory
+)
+
+$ErrorActionPreference = 'Stop'
+
+function Get-MarkerPosition {
+    param([string]$SceneText, [string]$Name)
+    $escaped = [regex]::Escape($Name)
+    $pattern = "(?s)m_Name: $escaped\r?\n.*?m_LocalPosition: \{x: ([^,]+), y: ([^,]+), z: ([^}]+)\}"
+    $match = [regex]::Match($SceneText, $pattern)
+    if (-not $match.Success) { throw "Marker not found in scene: $Name" }
+    return [ordered]@{
+        x = [double]::Parse($match.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture)
+        y = [double]::Parse($match.Groups[2].Value, [Globalization.CultureInfo]::InvariantCulture)
+        z = [double]::Parse($match.Groups[3].Value, [Globalization.CultureInfo]::InvariantCulture)
+    }
+}
+
+function New-Position {
+    param([double]$X, [double]$Y, [double]$Z)
+    return [ordered]@{ x = $X; y = $Y; z = $Z }
+}
+
+function New-TeeRecord {
+    param([string]$Type, [bool]$Enabled, [double]$Distance, $Position)
+    return [ordered]@{ TeeType = $Type; Enabled = $Enabled; Distance = $Distance; Position = $Position }
+}
+
+function New-Hazard {
+    param([object[]]$Points)
+    return [ordered]@{
+        pointCount = $Points.Count
+        coords = $Points
+        DZpos = New-Position 0 0 0
+        freeDrop = $false
+        innerOOB = $false
+        noAIL = $false
+        hasDZ = $false
+        islandGreen = $false
+    }
+}
+
+function Convert-ImagePolygonToHazard {
+    param([double[]]$Values, [double]$Height)
+    $points = @()
+    for ($i = 0; $i -lt $Values.Length; $i += 2) {
+        $points += ,(New-Position $Values[$i] $Height (2048.0 - $Values[$i + 1]))
+    }
+    return New-Hazard $points
+}
+
+$scene = Get-Content -Raw -LiteralPath $ScenePath
+$templateGkdPath = Join-Path $TemplateCourseDirectory 'Stonehill_2H.GKD'
+$templateDetailsPath = Join-Path $TemplateCourseDirectory 'coursedetails.txt'
+$template = Get-Content -Raw -LiteralPath $templateGkdPath | ConvertFrom-Json
+
+$pars = @(5, 4, 4, 4, 3, 3, 4, 3, 4)
+$indexes = @(1, 3, 15, 7, 11, 9, 13, 17, 5)
+$whiteYards = @(471, 344, 287, 318, 156, 151, 290, 161, 310)
+$redYards = @(446, 308, 271, 293, 144, 132, 227, 128, 300)
+$pinDays = @('Thursday', 'Friday', 'Saturday', 'Sunday')
+
+$aims = @(
+    [ordered]@{ A1 = @(672.2, 1376.5); A2 = @(485.232, 1361.849) },
+    [ordered]@{ A1 = @(667.209, 1261.823); A2 = $null },
+    [ordered]@{ A1 = @(502.3, 1193.7); A2 = $null },
+    [ordered]@{ A1 = @(639.6, 1174.3); A2 = $null },
+    [ordered]@{ A1 = @(801.6, 1129.2); A2 = $null },
+    [ordered]@{ A1 = @(675.4, 1043.1); A2 = $null },
+    [ordered]@{ A1 = @(704.7, 1002.0); A2 = $null },
+    [ordered]@{ A1 = @(867.5, 1061.5); A2 = $null },
+    [ordered]@{ A1 = @(1016.0, 1245.4); A2 = $null }
+)
+
+$holes = @()
+for ($hole = 1; $hole -le 18; $hole++) {
+    if ($hole -gt 9) {
+        $holes += ,[ordered]@{ Enabled = $false; HoleNumber = $hole; Par = 4; Index = 0; Tees = @(); Pins = @() }
+        continue
+    }
+
+    $suffix = $hole.ToString('00')
+    $white = Get-MarkerPosition $scene "GK_H${suffix}_Tee_White_$($whiteYards[$hole - 1])yd"
+    $red = Get-MarkerPosition $scene "GK_H${suffix}_Tee_Red_$($redYards[$hole - 1])yd"
+    $pins = @()
+    foreach ($day in $pinDays) {
+        $pins += ,[ordered]@{ Day = $day; Position = Get-MarkerPosition $scene "GK_H${suffix}_Pin_$day" }
+    }
+    $center = New-Position `
+        ((($pins | ForEach-Object { $_.Position.x } | Measure-Object -Average).Average) - 0.1) `
+        (($pins | ForEach-Object { $_.Position.y } | Measure-Object -Average).Average) `
+        ((($pins | ForEach-Object { $_.Position.z } | Measure-Object -Average).Average) + 0.3)
+
+    $tees = @(
+        (New-TeeRecord 'Black' $true 0 $null),
+        (New-TeeRecord 'White' $true ($whiteYards[$hole - 1] * 0.9144) $white),
+        (New-TeeRecord 'Green' $true 0 $null),
+        (New-TeeRecord 'Blue' $true 0 $null),
+        (New-TeeRecord 'Yellow' $true 0 $null),
+        (New-TeeRecord 'Red' $true ($redYards[$hole - 1] * 0.9144) $red),
+        (New-TeeRecord 'Junior' $true 0 $null),
+        (New-TeeRecord 'Par3' $true 0 $null)
+    )
+    $holeAims = $aims[$hole - 1]
+    $aim1 = New-Position $holeAims.A1[0] $center.y $holeAims.A1[1]
+    $aim2 = if ($null -ne $holeAims.A2) { New-Position $holeAims.A2[0] $center.y $holeAims.A2[1] } else { $null }
+    $tees += ,(New-TeeRecord 'AimPoint1' $true 0 $aim1)
+    $tees += ,(New-TeeRecord 'AimPoint2' $true 0 $aim2)
+    $tees += ,(New-TeeRecord 'GreenCenterPoint' $false 0 $center)
+
+    $holes += ,[ordered]@{
+        Enabled = $true
+        HoleNumber = $hole
+        Par = $pars[$hole - 1]
+        Index = $indexes[$hole - 1]
+        Tees = $tees
+        Pins = $pins
+    }
+}
+
+$mainHazard = $template.Hazards[0]
+$middlePond = Convert-ImagePolygonToHazard @(
+    543,914, 558,904, 591,901, 625,907, 650,920, 636,939, 610,946, 575,944, 550,935
+) 43
+$eastWetland = Convert-ImagePolygonToHazard @(
+    879,939, 895,929, 913,941, 922,960, 917,982, 900,999, 884,988, 876,963
+) 43
+
+$gkd = [ordered]@{}
+foreach ($property in $template.PSObject.Properties) { $gkd[$property.Name] = $property.Value }
+$gkd.SceneFolderName = 'Stonehill_9H'
+$gkd.CourseName = 'Stonehill Golf Club - Front Nine Beta'
+$gkd.Designer = 'Stonehill / Codex GIS-first beta'
+$gkd.DescriptionTxtFileName = ''
+$gkd.CoursePar = 34
+$gkd.par = 34
+$gkd.hazardCount = 3
+$gkd.teeTypeCount = 2
+$gkd.pOOB = [ordered]@{
+    pointCount = 4
+    coords = @(
+        (New-Position 225 45 875), (New-Position 1130 45 875),
+        (New-Position 1130 45 1490), (New-Position 225 45 1490)
+    )
+}
+$gkd.CourseInfo = 'GIS-first playable front nine using the 2023-24 DTM, 2021 orthophoto, official 2025 scorecard, and existing BaseProject vegetation, rock, water, and terrain assets.'
+$gkd.Holes = $holes
+$gkd.Hazards = @($mainHazard, $middlePond, $eastWetland)
+$gkd.TeeTypeTotalDistance = @(
+    (New-TeeRecord 'Black' $true 0 $null),
+    (New-TeeRecord 'White' $true (($whiteYards | Measure-Object -Sum).Sum * 0.9144) $null),
+    (New-TeeRecord 'Green' $true 0 $null),
+    (New-TeeRecord 'Blue' $true 0 $null),
+    (New-TeeRecord 'Yellow' $true 0 $null),
+    (New-TeeRecord 'Red' $true (($redYards | Measure-Object -Sum).Sum * 0.9144) $null),
+    (New-TeeRecord 'Junior' $true 0 $null),
+    (New-TeeRecord 'Par3' $true 0 $null)
+)
+
+New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
+$gkd | ConvertTo-Json -Depth 20 -Compress | Set-Content -LiteralPath (Join-Path $OutputDirectory 'Stonehill_9H.GKD') -NoNewline -Encoding UTF8
+
+$details = (Get-Content -Raw -LiteralPath $templateDetailsPath).Trim().Split('|')
+$details[0] = 'Stonehill Golf Club - Front Nine Beta'
+$details[1] = 'Stonehill / Codex GIS-first beta'
+$details[3] = 'A playable front-nine beta using Stonehill terrain, official 2025 routing, and existing BaseProject vegetation, rock, water, and normal-mapped playing surfaces.'
+$details[7] = '34'
+for ($i = 0; $i -lt 18; $i++) {
+    $details[8 + $i] = if ($i -lt 9) { [string]$pars[$i] } else { '0' }
+    $details[26 + $i] = if ($i -lt 9) { [string]$indexes[$i] } else { '0' }
+}
+$details[82] = [string](($whiteYards | Measure-Object -Sum).Sum)
+$details[86] = [string](($redYards | Measure-Object -Sum).Sum)
+($details -join '|') | Set-Content -LiteralPath (Join-Path $OutputDirectory 'coursedetails.txt') -NoNewline -Encoding UTF8
+
+Copy-Item -LiteralPath $BundlePath -Destination (Join-Path $OutputDirectory 'Stonehill_9H.gspcrse') -Force
+
+Add-Type -AssemblyName System.Drawing
+$sourceImage = [System.Drawing.Image]::FromFile($TopImagePath)
+try {
+    $bitmap = [System.Drawing.Bitmap]::new(480, 270)
+    $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+    try {
+        $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+        $cropHeight = [int]($sourceImage.Width * 9 / 16)
+        $cropY = [int](($sourceImage.Height - $cropHeight) / 2)
+        $graphics.DrawImage($sourceImage, [System.Drawing.Rectangle]::new(0,0,480,270),
+            [System.Drawing.Rectangle]::new(0,$cropY,$sourceImage.Width,$cropHeight), [System.Drawing.GraphicsUnit]::Pixel)
+        $overlay = [System.Drawing.SolidBrush]::new([System.Drawing.Color]::FromArgb(165, 8, 18, 20))
+        $graphics.FillRectangle($overlay, 0, 216, 480, 54)
+        $font = [System.Drawing.Font]::new('Arial', 17, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
+        $small = [System.Drawing.Font]::new('Arial', 10, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
+        $whiteBrush = [System.Drawing.SolidBrush]::new([System.Drawing.Color]::White)
+        $graphics.DrawString('STONEHILL GOLF CLUB', $font, $whiteBrush, 14, 223)
+        $graphics.DrawString('Front Nine Beta • Sudbury, Ontario', $small, $whiteBrush, 16, 247)
+        $bitmap.Save((Join-Path $OutputDirectory 'splash template.jpg'), [System.Drawing.Imaging.ImageFormat]::Jpeg)
+        $bitmap.Save((Join-Path $OutputDirectory 'image_altered_480_270splash template.jpg'), [System.Drawing.Imaging.ImageFormat]::Jpeg)
+        $overlay.Dispose(); $font.Dispose(); $small.Dispose(); $whiteBrush.Dispose()
+    }
+    finally { $graphics.Dispose(); $bitmap.Dispose() }
+}
+finally { $sourceImage.Dispose() }
+
+Write-Output "METADATA_READY $OutputDirectory"

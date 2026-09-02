@@ -1,0 +1,29 @@
+{
+  "terrain": {
+    "crs": "EPSG:26917",
+    "width_m": 2048.0,
+    "length_m": 2048.0,
+    "extent": [
+      497209.04652911134,
+      5140189.372738593,
+      499257.04652911134,
+      5142237.372738593
+    ]
+  },
+  "holes": {
+    "1": {
+      "par": 5,
+      "published_blue_yards": 516,
+      "published_blue_metres": 471.83,
+      "osm_centerline_metres": 408.96,
+      "note": "OSM center-line is a routing reference, not a surveyed tee-to-pin measurement."
+    },
+    "2": {
+      "par": 4,
+      "published_blue_yards": 344,
+      "published_blue_metres": 314.55,
+      "osm_centerline_metres": 280.73,
+      "note": "OSM center-line is a routing reference, not a surveyed tee-to-pin measurement."
+    }
+  }
+}

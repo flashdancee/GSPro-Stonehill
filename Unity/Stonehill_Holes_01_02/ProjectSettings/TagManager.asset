@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - ImageGen
+  - SourceImageGen
+  - TargetImageGen
+  - Windzone
+  - PostProcVol
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - sand
+  - Terrain
+  - DO NOT USE LAYER10
+  - DO NOT USE LAYER11
+  - CourseMeshes
+  - DO NOT USE LAYER13
+  - DO NOT USE LAYER14
+  - DO NOT USE LAYER15
+  - DO NOT USE LAYER16
+  - DO NOT USE LAYER17
+  - Grass3D (600m Cull)
+  - DO NOT USE LAYER19
+  - DO NOT USE LAYER20
+  - DO NOT USE LAYER21
+  - DO NOT USE LAYER22
+  - Extra Terrains
+  - FTC
+  - 500m Cull
+  - DO NOT USE LAYER26
+  - 
+  - 
+  - PostProcessing
+  - DO NOT USE LAYER30
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0

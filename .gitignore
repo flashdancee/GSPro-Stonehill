@@ -1,0 +1,41 @@
+# Unity-generated caches and editor files
+Unity/**/Library*/
+Unity/**/Temp/
+Unity/**/Logs/
+Unity/**/obj*/
+Unity/**/.vs*/
+Unity/**/UserSettings/
+Unity/**/*.csproj
+Unity/**/*.sln
+Unity/**/AltSystems/
+Unity/**/AutoUpdates/
+
+# Generated screenshots, builds, and encrypted GSPro packages
+Unity/**/StonehillArtifacts/
+Unity/**/StonehillBuildOutput/
+*.gspcrse
+*.course
+
+# The OPCD BaseProject is installed locally and may contain licensed assets.
+# Track the Stonehill-owned Unity overlay; reacquire the BaseProject separately.
+Unity/**/Assets/*
+!Unity/**/Assets/StonehillCourse.meta
+!Unity/**/Assets/StonehillCourse/
+!Unity/**/Assets/StonehillCourse/**
+
+# Locally installed authoring applications and licensed/private packages
+/OPCD/
+/OPCD-private/
+/Tools/
+/ToolsWindows/
+
+# Blender/Python/editor residue
+*.blend1
+__pycache__/
+*.pyc
+*.tmp
+*.bak
+*.log
+.DS_Store
+Thumbs.db
+
