@@ -20,6 +20,9 @@ public static class StonehillTwoHoleCourseBuilder
     private const string GeneratedFolder =
         "Assets/StonehillCourse/GeneratedFrontNine";
     private const string CourseRootName = "Stonehill Front-Nine Playable Course";
+    private const string RawHeightmapPath =
+        "Assets/StonehillCourse/SourceData/stonehill_heightmap_2049_le.raw";
+    private const int HeightmapResolution = 2049;
 
     private const string RoughTexturePath =
         "Assets/Course Painting Textures/Rough.jpg";
@@ -74,7 +77,8 @@ public static class StonehillTwoHoleCourseBuilder
     {
         525.957f,678.355f, 541.784f,679.839f, 556.951f,679.689f, 572.449f,678.050f,
         585.143f,675.088f, 598.007f,670.659f, 614.657f,668.365f, 632.300f,664.760f,
-        648.788f,664.099f, 662.964f,664.271f, 671.369f,666.741f, 672.198f,669.697f,
+        648.788f,664.099f, 662.964f,664.271f, 671.369f,666.741f, 690f,680f,
+        710f,690f, 735f,700f, 725f,716f, 700f,708f, 680f,695f,
         672.196f,675.286f, 672.355f,680.386f, 669.880f,685.152f, 666.090f,690.240f,
         659.327f,693.860f, 649.437f,697.956f, 637.235f,699.930f, 619.755f,701.724f,
         606.570f,703.530f, 590.902f,705.658f, 576.227f,707.297f, 568.974f,706.639f,
@@ -89,6 +93,7 @@ public static class StonehillTwoHoleCourseBuilder
 
     private static readonly Vector2[] Hole2Fairway = SvgPolygon(new float[]
     {
+        480f,758f, 510f,760f, 540f,766f,
         571.836f,779.198f, 574.966f,771.144f, 582.230f,764.079f, 590.798f,761.127f,
         597.560f,759.485f, 603.991f,760.476f, 609.430f,762.945f, 618.334f,764.592f,
         632.181f,760.153f, 647.019f,758.191f, 655.923f,760.005f, 665.488f,763.620f,
@@ -98,7 +103,8 @@ public static class StonehillTwoHoleCourseBuilder
         751.335f,832.608f, 744.622f,826.716f, 737.514f,829.714f, 728.609f,826.255f,
         718.883f,824.441f, 706.191f,819.181f, 687.722f,813.752f, 665.634f,807.988f,
         644.859f,804.703f, 624.753f,798.940f, 608.097f,792.356f, 596.226f,793.341f,
-        586.829f,793.504f, 579.745f,793.168f, 574.468f,788.077f
+        586.829f,793.504f, 579.745f,793.168f, 574.468f,788.077f,
+        545f,780f, 510f,774f, 480f,770f
     });
 
     private static readonly Vector2[] Hole1Green = SvgPolygon(new float[]
@@ -128,72 +134,71 @@ public static class StonehillTwoHoleCourseBuilder
 
     private static readonly Vector2[] Pond = SvgPolygon(new float[]
     {
-        571.441f,724.796f, 572.760f,732.197f, 572.258f,739.097f, 569.790f,744.685f,
-        563.849f,747.483f, 558.742f,740.570f, 555.279f,735.146f, 546.213f,733.176f,
-        536.486f,732.839f, 534.185f,722.816f, 537.816f,711.317f, 542.265f,708.685f,
-        551.331f,710.166f, 566.005f,713.627f, 582.324f,716.100f, 594.526f,714.293f,
-        607.551f,708.220f, 629.811f,705.261f, 653.715f,703.136f, 673.339f,702.487f,
-        672.014f,711.032f, 675.308f,717.111f, 679.432f,724.346f, 681.735f,730.758f,
-        679.589f,735.691f, 671.676f,734.210f, 660.467f,730.750f, 642.663f,735.678f,
-        626.008f,748.483f, 618.092f,755.225f, 613.635f,754.724f, 610.511f,747.989f,
-        606.227f,737.143f, 601.282f,727.929f, 595.844f,723.005f, 586.117f,723.168f,
-        579.355f,723.655f
+        535f,713f, 550f,708f, 575f,716f, 610f,710f, 650f,703f,
+        690f,700f, 720f,711f, 735f,725f, 729f,742f, 700f,746f,
+        668f,731f, 640f,736f, 620f,754f, 600f,742f, 575f,724f,
+        558f,742f, 537f,732f
     });
 
+    // Routing is stored in north-up orthophoto coordinates and converted to Unity
+    // X/Z by SvgPolyline. These bends and widths were redigitized from the user's
+    // highlighted panorama instead of extrapolating straight corridors from GPS.
+    // Every route starts at the green and ends at the official white tee distance.
     private static readonly Vector2[] Hole1Route = SvgPolyline(new float[]
     {
-        373.408f,782.734f, 485.232f,686.151f, 745.715f,705.557f
+        373f,783f, 395f,760f, 430f,720f, 485f,686f,
+        555f,680f, 625f,674f, 690f,682f, 766f,716f
     });
 
     private static readonly Vector2[] Hole2Route = SvgPolyline(new float[]
     {
-        761.287f,827.189f, 667.209f,786.177f, 490.797f,761.701f
+        761f,827f, 720f,804f, 667f,786f, 610f,775f,
+        550f,768f, 500f,763f, 456f,759f
     });
 
-    // GPS-to-orthophoto alignment for the remaining front-nine holes. Each route
-    // runs from green centre through the mapped aim point to the back tee.
     private static readonly Vector2[] Hole3Route = SvgPolyline(new float[]
     {
-        437.7f,879.4f, 502.3f,854.3f, 737.4f,857.1f
+        438f,879f, 480f,860f, 535f,850f, 600f,851f, 655f,856f, 695f,857f
     });
 
     private static readonly Vector2[] Hole4Route = SvgPolyline(new float[]
     {
-        710.9f,878.8f, 639.6f,873.7f, 346.8f,923.4f
+        711f,879f, 660f,873f, 605f,876f, 545f,885f, 485f,897f, 425f,910f
     });
 
     private static readonly Vector2[] Hole5Route = SvgPolyline(new float[]
     {
-        801.6f,918.8f, 776.8f,835.3f
+        802f,919f, 794f,890f, 784f,858f, 776f,830f, 767f,801f, 761f,782f
     });
 
     private static readonly Vector2[] Hole6Route = SvgPolyline(new float[]
     {
-        675.4f,1004.9f, 866.6f,919.7f
+        675f,1005f, 708f,992f, 744f,976f, 778f,960f, 802f,949f
     });
 
     private static readonly Vector2[] Hole7Route = SvgPolyline(new float[]
     {
-        768.6f,1018.5f, 704.7f,1046.0f, 447.4f,1056.0f
+        769f,1019f, 725f,1038f, 670f,1047f, 610f,1051f, 550f,1054f, 505f,1055f
     });
 
     private static readonly Vector2[] Hole8Route = SvgPolyline(new float[]
     {
-        867.5f,986.5f, 746.4f,1106.9f
+        868f,987f, 846f,1011f, 820f,1038f, 791f,1066f, 763f,1090f
     });
 
     private static readonly Vector2[] Hole9Route = SvgPolyline(new float[]
     {
-        1015.1f,719.2f, 1016.0f,802.6f, 834.3f,989.4f
+        1015f,719f, 1018f,770f, 1015f,815f, 994f,854f,
+        960f,889f, 918f,923f, 876f,946f
     });
 
-    private static readonly Vector2[] Hole3Fairway = CorridorPolygon(Hole3Route, new[] { 10f, 18f, 8f });
-    private static readonly Vector2[] Hole4Fairway = CorridorPolygon(Hole4Route, new[] { 10f, 18f, 8f });
-    private static readonly Vector2[] Hole5Fairway = CorridorPolygon(Hole5Route, new[] { 9f, 5f });
-    private static readonly Vector2[] Hole6Fairway = CorridorPolygon(Hole6Route, new[] { 9f, 5f });
-    private static readonly Vector2[] Hole7Fairway = CorridorPolygon(Hole7Route, new[] { 10f, 19f, 8f });
-    private static readonly Vector2[] Hole8Fairway = CorridorPolygon(Hole8Route, new[] { 9f, 5f });
-    private static readonly Vector2[] Hole9Fairway = CorridorPolygon(Hole9Route, new[] { 11f, 20f, 8f });
+    private static readonly Vector2[] Hole3Fairway = CorridorPolygon(Hole3Route, new[] { 10f, 17f, 22f, 24f, 18f, 7f });
+    private static readonly Vector2[] Hole4Fairway = CorridorPolygon(Hole4Route, new[] { 10f, 18f, 23f, 24f, 17f, 7f });
+    private static readonly Vector2[] Hole5Fairway = CorridorPolygon(Hole5Route, new[] { 10f, 15f, 19f, 18f, 12f, 7f });
+    private static readonly Vector2[] Hole6Fairway = CorridorPolygon(Hole6Route, new[] { 10f, 17f, 20f, 15f, 7f });
+    private static readonly Vector2[] Hole7Fairway = CorridorPolygon(Hole7Route, new[] { 10f, 18f, 23f, 24f, 16f, 7f });
+    private static readonly Vector2[] Hole8Fairway = CorridorPolygon(Hole8Route, new[] { 10f, 18f, 20f, 15f, 7f });
+    private static readonly Vector2[] Hole9Fairway = CorridorPolygon(Hole9Route, new[] { 11f, 16f, 22f, 24f, 22f, 15f, 7f });
 
     private static readonly Vector2[] Hole3Green = OrientedEllipse(Hole3Route[0], Hole3Route[1] - Hole3Route[0], 10.5f, 8f);
     private static readonly Vector2[] Hole4Green = OrientedEllipse(Hole4Route[0], Hole4Route[1] - Hole4Route[0], 10.5f, 8f);
@@ -203,24 +208,44 @@ public static class StonehillTwoHoleCourseBuilder
     private static readonly Vector2[] Hole8Green = OrientedEllipse(Hole8Route[0], Hole8Route[1] - Hole8Route[0], 9.5f, 7.5f);
     private static readonly Vector2[] Hole9Green = OrientedEllipse(Hole9Route[0], Hole9Route[1] - Hole9Route[0], 11f, 8.5f);
 
-    private static readonly Vector2[] MiddlePond = SvgPolygon(new float[]
+    private static readonly Vector2[] Hole4Pond = SvgPolygon(new float[]
     {
-        543f,914f, 558f,904f, 591f,901f, 625f,907f, 650f,920f,
-        636f,939f, 610f,946f, 575f,944f, 550f,935f
+        586f,906f, 610f,899f, 647f,901f, 685f,908f, 716f,919f,
+        704f,933f, 675f,941f, 635f,942f, 602f,933f, 586f,920f
     });
 
-    private static readonly Vector2[] EastWetland = SvgPolygon(new float[]
+    private static readonly Vector2[] Hole5Pond = SvgPolygon(new float[]
     {
-        879f,939f, 895f,929f, 913f,941f, 922f,960f, 917f,982f,
-        900f,999f, 884f,988f, 876f,963f
+        970f,827f, 991f,821f, 1014f,827f, 1022f,840f,
+        1014f,852f, 991f,855f, 971f,847f
+    });
+
+    private static readonly Vector2[] Hole6UpperPond = SvgPolygon(new float[]
+    {
+        873f,936f, 893f,928f, 911f,936f, 920f,951f,
+        914f,968f, 899f,980f, 883f,970f, 876f,953f
+    });
+
+    private static readonly Vector2[] Hole6LowerPond = SvgPolygon(new float[]
+    {
+        823f,972f, 840f,966f, 855f,975f, 857f,991f,
+        846f,1004f, 830f,1000f, 820f,987f
+    });
+
+    private static readonly Vector2[] Hole7Pond = SvgPolygon(new float[]
+    {
+        728f,1078f, 752f,1068f, 783f,1066f, 817f,1074f, 839f,1088f,
+        829f,1102f, 800f,1110f, 762f,1108f, 735f,1097f
+    });
+
+    private static readonly Vector2[] Hole9Pond = SvgPolygon(new float[]
+    {
+        911f,660f, 929f,654f, 944f,663f, 949f,685f,
+        946f,710f, 935f,729f, 920f,721f, 912f,700f
     });
 
     private static readonly Vector2[] Hole4Bunker = OrientedEllipse(new Vector2(492f, 2048f - 886f),
         Hole4Route[0] - Hole4Route[Hole4Route.Length - 1], 8f, 4f);
-    private static readonly Vector2[] Hole6Bunker = OrientedEllipse(new Vector2(690f, 2048f - 986f),
-        Hole6Route[0] - Hole6Route[Hole6Route.Length - 1], 7f, 3.5f);
-    private static readonly Vector2[] Hole7Bunker = OrientedEllipse(new Vector2(735f, 2048f - 1032f),
-        Hole7Route[0] - Hole7Route[Hole7Route.Length - 1], 7f, 3.5f);
     private static readonly Vector2[] FrontNineTeeCenters = BuildFrontNineTeeCenters();
 
     [MenuItem("Stonehill/Build Front-Nine Playable Course")]
@@ -230,7 +255,18 @@ public static class StonehillTwoHoleCourseBuilder
         if (terrain == null || terrain.terrainData == null)
             throw new InvalidOperationException("Create/open the Stonehill terrain before building the course.");
 
+        Vector2[][] fairways = FrontNineFairways();
+        Vector2[][] greens = FrontNineGreens();
+        Vector2[][] routes = FrontNineRoutes();
+        int[] pars = { 5, 4, 4, 4, 3, 3, 4, 3, 4 };
+        int[] whiteYards = { 471, 344, 287, 318, 156, 151, 290, 161, 310 };
+        int[] redYards = { 446, 308, 271, 293, 144, 132, 227, 128, 300 };
+        Vector2[] whiteTees;
+        Vector2[] redTees;
+        BuildFrontNineTeePositions(routes, whiteYards, redYards, out whiteTees, out redTees);
+
         DeleteGeneratedContent();
+        ResetAndShapeTerrain(terrain, greens, whiteTees, redTees, routes);
         ConfigureBaseRough(terrain);
         ConfigureSceneLighting();
 
@@ -238,19 +274,12 @@ public static class StonehillTwoHoleCourseBuilder
         GameObject surfaces = NewParent("Playing Surfaces", root.transform);
         GameObject markers = NewParent("GreenKeeper Markers - Front Nine", root.transform);
 
-        Vector2[][] fairways = FrontNineFairways();
-        Vector2[][] greens = FrontNineGreens();
-        Vector2[][] routes = FrontNineRoutes();
-        int[] pars = { 5, 4, 4, 4, 3, 3, 4, 3, 4 };
-        int[] whiteYards = { 471, 344, 287, 318, 156, 151, 290, 161, 310 };
-        int[] redYards = { 446, 308, 271, 293, 144, 132, 227, 128, 300 };
-
         for (int i = 0; i < 9; i++)
         {
             string suffix = (i + 1).ToString("00");
             CreateSurface("Spline_Fairway_Hole" + suffix, fairways[i], 1.0f, 0.010f, 0f, false,
                 FairwayMaterialPath, FairwayPhysicsPath, terrain, surfaces.transform);
-            CreateSurface("Spline_Green_Hole" + suffix, greens[i], 0.5f, 0.018f, 0f, false,
+            CreateSurface("Spline_Green_Hole" + suffix, greens[i], 0.5f, 0.024f, 1.5f, false,
                 GreenMaterialPath, GreenPhysicsPath, terrain, surfaces.transform);
         }
 
@@ -258,31 +287,15 @@ public static class StonehillTwoHoleCourseBuilder
             BunkerMaterialPath, BunkerPhysicsPath, terrain, surfaces.transform);
         CreateSurface("Spline_Bunker_Hole04", Hole4Bunker, 0.5f, 0.012f, 0f, false,
             BunkerMaterialPath, BunkerPhysicsPath, terrain, surfaces.transform);
-        CreateSurface("Spline_Bunker_Hole06", Hole6Bunker, 0.5f, 0.012f, 0f, false,
-            BunkerMaterialPath, BunkerPhysicsPath, terrain, surfaces.transform);
-        CreateSurface("Spline_Bunker_Hole07", Hole7Bunker, 0.5f, 0.012f, 0f, false,
-            BunkerMaterialPath, BunkerPhysicsPath, terrain, surfaces.transform);
-        CreateSurface("Spline_Water_Holes01_02", Pond, 1.5f, 0.040f, 0f, true,
-            WaterMaterialPath, WaterPhysicsPath, terrain, surfaces.transform);
-        CreateSurface("Spline_Water_MiddlePond", MiddlePond, 1.5f, 0.040f, 0f, true,
-            WaterMaterialPath, WaterPhysicsPath, terrain, surfaces.transform);
-        CreateSurface("Spline_Water_EastWetland", EastWetland, 1.5f, 0.040f, 0f, true,
-            WaterMaterialPath, WaterPhysicsPath, terrain, surfaces.transform);
-
-        Vector2[] whiteTees = new Vector2[9];
-        Vector2[] redTees = new Vector2[9];
-        // The mapped routing line originally ended well behind the actual fairway and the
-        // yardage extrapolation pushed the tees another 40-70 metres backward. Anchor the
-        // tees to the visible fairway entrance instead: White 30 yd back, Red 20 yd back.
-        Vector2 h1FairwayEntrance = new Vector2(672.2f, 1376.5f);
-        Vector2 h1BackDirection = (Hole1Route[Hole1Route.Length - 1] - h1FairwayEntrance).normalized;
-        whiteTees[0] = h1FairwayEntrance + h1BackDirection * (30f * 0.9144f);
-        redTees[0] = h1FairwayEntrance + h1BackDirection * (20f * 0.9144f);
-        for (int i = 1; i < 9; i++)
+        Vector2[][] waters = FrontNineWaters();
+        string[] waterNames =
         {
-            whiteTees[i] = routes[i][routes[i].Length - 1];
-            redTees[i] = PointAtFractionFromStart(routes[i], redYards[i] / (float)whiteYards[i]);
-        }
+            "Holes01_02_Lake", "Hole04_Lake", "Hole05_Pond", "Hole06_UpperPond",
+            "Hole06_LowerPond", "Hole07_Pond", "Hole09_Pond"
+        };
+        for (int i = 0; i < waters.Length; i++)
+            CreateSurface("Spline_Water_" + waterNames[i], waters[i], 1.0f, 0.040f, 0f, true,
+                WaterMaterialPath, WaterPhysicsPath, terrain, surfaces.transform);
 
         for (int i = 0; i < 9; i++)
         {
@@ -355,6 +368,150 @@ public static class StonehillTwoHoleCourseBuilder
         EnsureAssetFolder(GeneratedFolder);
     }
 
+    private static void ResetAndShapeTerrain(
+        Terrain terrain,
+        Vector2[][] greens,
+        Vector2[] whiteTees,
+        Vector2[] redTees,
+        Vector2[][] routes)
+    {
+        string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+        string rawPath = Path.Combine(projectRoot, RawHeightmapPath);
+        if (!File.Exists(rawPath))
+            throw new FileNotFoundException("Missing prepared Stonehill heightmap", rawPath);
+
+        byte[] bytes = File.ReadAllBytes(rawPath);
+        int expectedLength = HeightmapResolution * HeightmapResolution * 2;
+        if (bytes.Length != expectedLength)
+            throw new InvalidDataException("Unexpected Stonehill RAW byte length: " + bytes.Length);
+
+        TerrainData data = terrain.terrainData;
+        if (data.heightmapResolution != HeightmapResolution)
+            throw new InvalidOperationException("Stonehill terrain must use a 2049 heightmap.");
+
+        // Rebuild from the source on every run so terrain shaping is deterministic and
+        // never compounds when the menu command is executed repeatedly.
+        float[,] heights = new float[HeightmapResolution, HeightmapResolution];
+        for (int unityRow = 0; unityRow < HeightmapResolution; unityRow++)
+        {
+            int sourceRow = HeightmapResolution - 1 - unityRow;
+            for (int column = 0; column < HeightmapResolution; column++)
+            {
+                int offset = (sourceRow * HeightmapResolution + column) * 2;
+                ushort value = (ushort)(bytes[offset] | (bytes[offset + 1] << 8));
+                heights[unityRow, column] = value / 65535f;
+            }
+        }
+
+        for (int i = 0; i < greens.Length; i++)
+            FlattenPolygonHeight(terrain, heights, greens[i], 7f);
+
+        for (int i = 0; i < whiteTees.Length; i++)
+        {
+            Vector2 aim = routes[i].Length > 1 ? routes[i][routes[i].Length - 2] : routes[i][0];
+            FlattenPolygonHeight(terrain, heights,
+                TeeRectangle(whiteTees[i], aim - whiteTees[i]), 4f);
+            FlattenPolygonHeight(terrain, heights,
+                TeeRectangle(redTees[i], aim - redTees[i]), 4f);
+        }
+
+        data.SetHeights(0, 0, heights);
+        TerrainCollider collider = terrain.GetComponent<TerrainCollider>();
+        if (collider != null)
+            collider.terrainData = data;
+        EditorUtility.SetDirty(data);
+        EditorUtility.SetDirty(terrain);
+    }
+
+    private static void FlattenPolygonHeight(
+        Terrain terrain, float[,] heights, Vector2[] polygon, float featherMetres)
+    {
+        TerrainData data = terrain.terrainData;
+        Vector3 origin = terrain.transform.position;
+        float xScale = (HeightmapResolution - 1f) / data.size.x;
+        float zScale = (HeightmapResolution - 1f) / data.size.z;
+
+        Vector2 center = PolygonCenter(polygon);
+        float target = SampleHeightArray(heights, data, origin, center);
+        for (int i = 0; i < polygon.Length; i++)
+            target += SampleHeightArray(heights, data, origin, polygon[i]);
+        target /= polygon.Length + 1f;
+
+        float minX = center.x;
+        float maxX = center.x;
+        float minZ = center.y;
+        float maxZ = center.y;
+        for (int i = 0; i < polygon.Length; i++)
+        {
+            minX = Mathf.Min(minX, polygon[i].x);
+            maxX = Mathf.Max(maxX, polygon[i].x);
+            minZ = Mathf.Min(minZ, polygon[i].y);
+            maxZ = Mathf.Max(maxZ, polygon[i].y);
+        }
+
+        int firstX = Mathf.Clamp(Mathf.FloorToInt((minX - featherMetres - origin.x) * xScale),
+            0, HeightmapResolution - 1);
+        int lastX = Mathf.Clamp(Mathf.CeilToInt((maxX + featherMetres - origin.x) * xScale),
+            0, HeightmapResolution - 1);
+        int firstZ = Mathf.Clamp(Mathf.FloorToInt((minZ - featherMetres - origin.z) * zScale),
+            0, HeightmapResolution - 1);
+        int lastZ = Mathf.Clamp(Mathf.CeilToInt((maxZ + featherMetres - origin.z) * zScale),
+            0, HeightmapResolution - 1);
+
+        for (int z = firstZ; z <= lastZ; z++)
+        {
+            float worldZ = origin.z + z / zScale;
+            for (int x = firstX; x <= lastX; x++)
+            {
+                float worldX = origin.x + x / xScale;
+                Vector2 point = new Vector2(worldX, worldZ);
+                bool inside = PointInPolygon(point, polygon);
+                float distance = inside ? 0f : DistanceToPolygon(point, polygon);
+                if (!inside && distance >= featherMetres)
+                    continue;
+
+                float blend = inside ? 1f : 1f - distance / featherMetres;
+                blend = blend * blend * (3f - 2f * blend);
+                heights[z, x] = Mathf.Lerp(heights[z, x], target, blend);
+            }
+        }
+    }
+
+    private static float SampleHeightArray(
+        float[,] heights, TerrainData data, Vector3 origin, Vector2 point)
+    {
+        int x = Mathf.Clamp(Mathf.RoundToInt(
+            (point.x - origin.x) / data.size.x * (HeightmapResolution - 1)),
+            0, HeightmapResolution - 1);
+        int z = Mathf.Clamp(Mathf.RoundToInt(
+            (point.y - origin.z) / data.size.z * (HeightmapResolution - 1)),
+            0, HeightmapResolution - 1);
+        return heights[z, x];
+    }
+
+    private static float DistanceToPolygon(Vector2 point, Vector2[] polygon)
+    {
+        float closest = float.MaxValue;
+        int previous = polygon.Length - 1;
+        for (int current = 0; current < polygon.Length; current++)
+        {
+            closest = Mathf.Min(closest,
+                DistanceToSegment(point, polygon[previous], polygon[current]));
+            previous = current;
+        }
+        return closest;
+    }
+
+    private static float DistanceToSegment(Vector2 point, Vector2 a, Vector2 b)
+    {
+        Vector2 segment = b - a;
+        float denominator = segment.sqrMagnitude;
+        if (denominator < 0.0001f)
+            return Vector2.Distance(point, a);
+        float t = Mathf.Clamp01(Vector2.Dot(point - a, segment) / denominator);
+        return Vector2.Distance(point, a + segment * t);
+    }
+
     private static void ConfigureBaseRough(Terrain terrain)
     {
         Texture2D aerial = LoadTexture(AerialTexturePath);
@@ -385,17 +542,9 @@ public static class StonehillTwoHoleCourseBuilder
         Vector2[][] bunkers = FrontNineBunkers();
         int[] whiteYards = { 471, 344, 287, 318, 156, 151, 290, 161, 310 };
         int[] redYards = { 446, 308, 271, 293, 144, 132, 227, 128, 300 };
-        Vector2[] whiteTees = new Vector2[9];
-        Vector2[] redTees = new Vector2[9];
-        Vector2 h1FairwayEntrance = new Vector2(672.2f, 1376.5f);
-        Vector2 h1BackDirection = (Hole1Route[Hole1Route.Length - 1] - h1FairwayEntrance).normalized;
-        whiteTees[0] = h1FairwayEntrance + h1BackDirection * (30f * 0.9144f);
-        redTees[0] = h1FairwayEntrance + h1BackDirection * (20f * 0.9144f);
-        for (int i = 1; i < 9; i++)
-        {
-            whiteTees[i] = routes[i][routes[i].Length - 1];
-            redTees[i] = PointAtFractionFromStart(routes[i], redYards[i] / (float)whiteYards[i]);
-        }
+        Vector2[] whiteTees;
+        Vector2[] redTees;
+        BuildFrontNineTeePositions(routes, whiteYards, redYards, out whiteTees, out redTees);
         List<Vector2[]> teePolygons = new List<Vector2[]>();
         for (int i = 0; i < 9; i++)
         {
@@ -1039,8 +1188,13 @@ public static class StonehillTwoHoleCourseBuilder
 
     private static bool IsInsideWater(Vector2 point)
     {
-        return PointInPolygon(point, Pond) || PointInPolygon(point, MiddlePond) ||
-               PointInPolygon(point, EastWetland);
+        Vector2[][] waters = FrontNineWaters();
+        for (int i = 0; i < waters.Length; i++)
+        {
+            if (PointInPolygon(point, waters[i]))
+                return true;
+        }
+        return false;
     }
 
     private static bool IsNearAnyTee(Vector2 point, float clearance)
@@ -1112,7 +1266,16 @@ public static class StonehillTwoHoleCourseBuilder
 
     private static Vector2[][] FrontNineBunkers()
     {
-        return new[] { Hole2Bunker, Hole4Bunker, Hole6Bunker, Hole7Bunker };
+        return new[] { Hole2Bunker, Hole4Bunker };
+    }
+
+    private static Vector2[][] FrontNineWaters()
+    {
+        return new[]
+        {
+            Pond, Hole4Pond, Hole5Pond, Hole6UpperPond,
+            Hole6LowerPond, Hole7Pond, Hole9Pond
+        };
     }
 
     private static Vector2[] BuildFrontNineTeeCenters()
@@ -1120,18 +1283,34 @@ public static class StonehillTwoHoleCourseBuilder
         Vector2[][] routes = FrontNineRoutes();
         int[] whiteYards = { 471, 344, 287, 318, 156, 151, 290, 161, 310 };
         int[] redYards = { 446, 308, 271, 293, 144, 132, 227, 128, 300 };
+        Vector2[] whiteTees;
+        Vector2[] redTees;
+        BuildFrontNineTeePositions(routes, whiteYards, redYards, out whiteTees, out redTees);
         Vector2[] result = new Vector2[18];
-        Vector2 h1FairwayEntrance = new Vector2(672.2f, 1376.5f);
-        Vector2 h1BackDirection = (Hole1Route[Hole1Route.Length - 1] - h1FairwayEntrance).normalized;
-        result[0] = h1FairwayEntrance + h1BackDirection * (30f * 0.9144f);
-        result[1] = h1FairwayEntrance + h1BackDirection * (20f * 0.9144f);
-        for (int i = 1; i < 9; i++)
+        for (int i = 0; i < 9; i++)
         {
-            result[i * 2] = routes[i][routes[i].Length - 1];
-            result[i * 2 + 1] = PointAtFractionFromStart(routes[i],
-                redYards[i] / (float)whiteYards[i]);
+            result[i * 2] = whiteTees[i];
+            result[i * 2 + 1] = redTees[i];
         }
         return result;
+    }
+
+    private static void BuildFrontNineTeePositions(
+        Vector2[][] routes,
+        int[] whiteYards,
+        int[] redYards,
+        out Vector2[] whiteTees,
+        out Vector2[] redTees)
+    {
+        whiteTees = new Vector2[routes.Length];
+        redTees = new Vector2[routes.Length];
+        for (int i = 0; i < routes.Length; i++)
+        {
+            // A route begins at its green. Walking the official scorecard distance
+            // along it makes the markers, tee decks, and metadata agree in world scale.
+            whiteTees[i] = PointAtDistanceFromStart(routes[i], whiteYards[i] * 0.9144f);
+            redTees[i] = PointAtDistanceFromStart(routes[i], redYards[i] * 0.9144f);
+        }
     }
 
     private static Vector2 PointAtFractionFromStart(Vector2[] route, float fraction)

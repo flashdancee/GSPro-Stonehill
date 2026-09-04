@@ -10,6 +10,7 @@ remain local because they are large and may have separate redistribution terms.
 - Unity `Packages` and `ProjectSettings`
 - QGIS, Inkscape, routing, reference, and automation sources
 - Plain-text GSPro/GreenKeeper metadata and preview artwork
+- The user-annotated front-nine panorama (stored with Git LFS)
 
 ## Deliberately untracked
 

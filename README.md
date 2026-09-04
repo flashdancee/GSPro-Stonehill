@@ -1,10 +1,11 @@
 # Stonehill GSPro course
 
-> **Current checkpoint (September 2026):** A playable front-nine beta is built
-> and installed in GSPro. It includes nine enabled holes, official 2025 par and
-> yardages, white/red tees, four pins per hole, aim points, initial penalty-water
-> areas, and a first terrain/vegetation/material pass. Holes 3–9 remain GIS-first
-> approximations pending on-course photographs and playtesting.
+> **Current checkpoint (September 2026):** The front-nine beta has been rebuilt
+> from the annotated Stonehill panorama and installed in GSPro. It includes nine
+> enabled holes, official 2025 par and yardages, correctly spaced white/red tees,
+> four pins per hole, aim points, seven mapped penalty-water areas, and physically
+> smoothed greens and tees. The routing is substantially improved but remains a
+> beta pending on-course photographs and playtesting.
 
 This project is a true-scale reconstruction of Stonehill Golf Club in Sudbury,
 Ontario. The terrain extent covers the entire course, and the current playable
@@ -19,6 +20,8 @@ checkpoint contains the front nine.
 - A true-scale, layered Inkscape SVG reference has been generated.
 - An openly licensed Ontario COOP 2021 orthophoto has been aligned at exactly
   one image pixel per terrain metre for spline tracing.
+- `highlighted-stone-hill-panorama-full-transparent.png` identifies the front-nine
+  routing, hole numbers, tee areas, and water features supplied by the course user.
 - OPCD V4 BaseProject dated 2025-12-02 is unpacked as the Stonehill Unity project.
 - GreenKeeper 4.1.0 and the current Blender extension installer are available.
 - Blender 4.2.2 LTS is installed locally with OPCD Tools 3.5.8, Edit Mesh
@@ -96,25 +99,22 @@ The OPCD V4 palette is stored in the isolated Inkscape profile used by this
 launcher. The AppImage uses extract-and-run mode because FUSE is unavailable
 on this system; the first window can therefore take a little longer to appear.
 
-## Next build checkpoint
+## Current validation checkpoint
 
 See `WINDOWS_HANDOFF.md` for the exact files and first-opening procedure. A new
 Codex session should begin with the prompt in `CONTINUE_ON_WINDOWS.md`.
 
-1. Install and activate Unity 2018.2.8f1 on the Windows authoring computer.
-2. Finish and validate the two-hole SVG spline in the local Inkscape setup.
-3. Transfer the prepared Unity project to the Windows authoring computer.
-4. Open `Unity/Stonehill_Holes_01_02` and create the prepared RAW terrain using
-   the included `Stonehill` editor menu.
-5. Verify the SVG against licensed aerial imagery, and
-   complete rough, perimeter, cart-path, and other missing spline layers.
-6. Submit the two-hole SVG through the OPCD Web App, conform the result in Blender, and import
-   the FBX into the OPCD Unity project.
-7. Configure holes 1 and 2 in GreenKeeper and build the first `.course` file.
+1. Play all nine holes from both white and red tees in GSPro.
+2. Verify the seven mapped water penalties, aiming, putting, and gimme behavior.
+3. Photograph each hole from its tees, landing area, approach, green, and hazards.
+4. Refine fairway/rough edges, bunker outlines, cart paths, vegetation, and rock
+   placement from those photographs.
+5. Extend the same annotated, deterministic workflow to holes 10–18.
 
 ## Accuracy status
 
-The terrain source is authoritative LiDAR-derived elevation. The golf shapes
-are community-mapped reference data, not survey data. Before release, verify
-green edges, tee decks, bunker outlines, water levels, cart paths, vegetation,
-and pin areas using current licensed imagery and on-site photographs.
+The terrain source is authoritative LiDAR-derived elevation. Front-nine routing
+now follows the supplied annotated panorama, while feature edges remain visual
+interpretations rather than survey data. Before release, verify green edges,
+tee decks, bunker outlines, water levels, cart paths, vegetation, and pin areas
+using on-site photographs and playtesting.

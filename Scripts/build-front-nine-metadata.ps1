@@ -66,15 +66,15 @@ $redYards = @(446, 308, 271, 293, 144, 132, 227, 128, 300)
 $pinDays = @('Thursday', 'Friday', 'Saturday', 'Sunday')
 
 $aims = @(
-    [ordered]@{ A1 = @(672.2, 1376.5); A2 = @(485.232, 1361.849) },
-    [ordered]@{ A1 = @(667.209, 1261.823); A2 = $null },
-    [ordered]@{ A1 = @(502.3, 1193.7); A2 = $null },
-    [ordered]@{ A1 = @(639.6, 1174.3); A2 = $null },
-    [ordered]@{ A1 = @(801.6, 1129.2); A2 = $null },
-    [ordered]@{ A1 = @(675.4, 1043.1); A2 = $null },
-    [ordered]@{ A1 = @(704.7, 1002.0); A2 = $null },
-    [ordered]@{ A1 = @(867.5, 1061.5); A2 = $null },
-    [ordered]@{ A1 = @(1016.0, 1245.4); A2 = $null }
+    [ordered]@{ A1 = @(625, 1374); A2 = @(485, 1362) },
+    [ordered]@{ A1 = @(610, 1273); A2 = $null },
+    [ordered]@{ A1 = @(535, 1198); A2 = $null },
+    [ordered]@{ A1 = @(545, 1163); A2 = $null },
+    [ordered]@{ A1 = @(784, 1190); A2 = $null },
+    [ordered]@{ A1 = @(744, 1072); A2 = $null },
+    [ordered]@{ A1 = @(610, 997); A2 = $null },
+    [ordered]@{ A1 = @(820, 1010); A2 = $null },
+    [ordered]@{ A1 = @(960, 1159); A2 = @(1015, 1233) }
 )
 
 $holes = @()
@@ -123,13 +123,19 @@ for ($hole = 1; $hole -le 18; $hole++) {
     }
 }
 
-$mainHazard = $template.Hazards[0]
-$middlePond = Convert-ImagePolygonToHazard @(
-    543,914, 558,904, 591,901, 625,907, 650,920, 636,939, 610,946, 575,944, 550,935
-) 43
-$eastWetland = Convert-ImagePolygonToHazard @(
-    879,939, 895,929, 913,941, 922,960, 917,982, 900,999, 884,988, 876,963
-) 43
+$hazardPolygons = @()
+$hazardPolygons += ,@(535,713, 550,708, 575,716, 610,710, 650,703, 690,700, 720,711, 735,725,
+    729,742, 700,746, 668,731, 640,736, 620,754, 600,742, 575,724, 558,742, 537,732)
+$hazardPolygons += ,@(586,906, 610,899, 647,901, 685,908, 716,919, 704,933, 675,941, 635,942, 602,933, 586,920)
+$hazardPolygons += ,@(970,827, 991,821, 1014,827, 1022,840, 1014,852, 991,855, 971,847)
+$hazardPolygons += ,@(873,936, 893,928, 911,936, 920,951, 914,968, 899,980, 883,970, 876,953)
+$hazardPolygons += ,@(823,972, 840,966, 855,975, 857,991, 846,1004, 830,1000, 820,987)
+$hazardPolygons += ,@(728,1078, 752,1068, 783,1066, 817,1074, 839,1088, 829,1102, 800,1110, 762,1108, 735,1097)
+$hazardPolygons += ,@(911,660, 929,654, 944,663, 949,685, 946,710, 935,729, 920,721, 912,700)
+$hazards = @()
+foreach ($polygon in $hazardPolygons) {
+    $hazards += ,(Convert-ImagePolygonToHazard $polygon 43)
+}
 
 $gkd = [ordered]@{}
 foreach ($property in $template.PSObject.Properties) { $gkd[$property.Name] = $property.Value }
@@ -139,7 +145,7 @@ $gkd.Designer = 'Stonehill / Codex GIS-first beta'
 $gkd.DescriptionTxtFileName = ''
 $gkd.CoursePar = 34
 $gkd.par = 34
-$gkd.hazardCount = 3
+$gkd.hazardCount = $hazards.Count
 $gkd.teeTypeCount = 2
 $gkd.pOOB = [ordered]@{
     pointCount = 4
@@ -148,9 +154,9 @@ $gkd.pOOB = [ordered]@{
         (New-Position 1130 45 1490), (New-Position 225 45 1490)
     )
 }
-$gkd.CourseInfo = 'GIS-first playable front nine using the 2023-24 DTM, 2021 orthophoto, official 2025 scorecard, and existing BaseProject vegetation, rock, water, and terrain assets.'
+$gkd.CourseInfo = 'Front-nine rebuild using the annotated Stonehill panorama, 2023-24 DTM, 2021 orthophoto, official 2025 scorecard, and existing BaseProject assets.'
 $gkd.Holes = $holes
-$gkd.Hazards = @($mainHazard, $middlePond, $eastWetland)
+$gkd.Hazards = $hazards
 $gkd.TeeTypeTotalDistance = @(
     (New-TeeRecord 'Black' $true 0 $null),
     (New-TeeRecord 'White' $true (($whiteYards | Measure-Object -Sum).Sum * 0.9144) $null),
@@ -168,7 +174,7 @@ $gkd | ConvertTo-Json -Depth 20 -Compress | Set-Content -LiteralPath (Join-Path 
 $details = (Get-Content -Raw -LiteralPath $templateDetailsPath).Trim().Split('|')
 $details[0] = 'Stonehill Golf Club - Front Nine Beta'
 $details[1] = 'Stonehill / Codex GIS-first beta'
-$details[3] = 'A playable front-nine beta using Stonehill terrain, official 2025 routing, and existing BaseProject vegetation, rock, water, and normal-mapped playing surfaces.'
+$details[3] = 'A rebuilt front-nine beta with annotated routing, official yardages, smoothed greens and tees, and mapped water hazards.'
 $details[7] = '34'
 for ($i = 0; $i -lt 18; $i++) {
     $details[8 + $i] = if ($i -lt 9) { [string]$pars[$i] } else { '0' }
