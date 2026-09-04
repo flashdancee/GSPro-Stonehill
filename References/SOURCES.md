@@ -34,6 +34,24 @@ OpenStreetMap vectors must retain appropriate attribution if redistributed.
 - Export CRS and extent match the terrain: `EPSG:26917`, 2048 × 2048 m
 - Retrieved: 2026-09-01
 
+### Native-resolution reference supplied September 2026
+
+- Image: `stone-hill-COOP2021-orthomosaic.jpg`
+- World file: `stone-hill-COOP2021-orthomosaic.jgw`
+- Projection: `stone-hill-COOP2021-orthomosaic.prj`
+- Raster size: 15,000 × 15,000 pixels
+- Native ground sampling: 0.20 m/pixel; 3,000 × 3,000 m coverage
+- Extent from the world file pixel edges: `497000, 5140000, 500000, 5143000`
+- Declared CRS: NAD83(CSRS) / UTM zone 17N (`EPSG:2958`)
+- The existing 2,048 m Unity terrain occupies pixel columns approximately
+  `1045–11285` and rows `3813–14053` in this raster.
+- Use this native raster to trace fairway/green boundaries, shorelines, cart
+  paths, tree lines, and exposed Canadian Shield shelves. Use the LiDAR DTM for
+  elevation and slope; imagery alone cannot establish rock height or collision.
+- The CSRS/non-CSRS UTM distinction is sub-metre at this site. The image aligns
+  visually with the existing `EPSG:26917` terrain crop, but preserve both source
+  CRS declarations rather than silently relabelling either dataset.
+
 ## Scorecard reference
 
 - Stonehill hole 1: par 5, published blue distance 516 yd
