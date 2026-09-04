@@ -36,8 +36,14 @@ public static class StonehillTwoHoleCourseBuilder
         "Assets/Course Painting Textures/RockGrassy.jpg";
     private const string RockGrassNormalPath =
         "Assets/Course Painting Textures/RockGrassy_normal.jpg";
+    private const string CliffTexturePath =
+        "Assets/Course Painting Textures/Cliffs.jpg";
+    private const string CliffNormalPath =
+        "Assets/Course Painting Textures/Cliffs_normal.jpg";
     private const string FairwayTexturePath =
         "Assets/Course Painting Textures/Fairway.jpg";
+    private const string SemiTexturePath =
+        "Assets/Course Painting Textures/Semi.jpg";
     private const string GreenTexturePath =
         "Assets/Course Painting Textures/Green.jpg";
     private const string TeeTexturePath =
@@ -64,6 +70,9 @@ public static class StonehillTwoHoleCourseBuilder
     private const string CubeMapWaterMaterialPath = "Assets/CubeMapWater/CubeMap_Water.mat";
     private const string BirchPrefabPath = "Assets/Trees/White Birch/White_Birch.prefab";
     private const string ConiferPrefabPath = "Assets/Trees/Conifer/Conifer_Desktop.prefab";
+    private const string BroadleafPrefabPath = "Assets/Trees/Broadleaf/Broadleaf_Desktop.prefab";
+    private const string SmallBroadleafPrefabPath = "Assets/Trees/Broadleaf/Broadleaf_Desktop_Small.prefab";
+    private const string MaplePrefabPath = "Assets/TreeShare/Maple/Maple.prefab";
     private const string DouglasFirPrefabPath = "Assets/TreeShare/DouglasFir/DouglasFir.prefab";
     private const string RockGroupPrefabPath = "Assets/Rocks and Boulders/Rocks/Prefabs/Rock1_grup1.prefab";
     private const string RockSinglePrefabPath = "Assets/Rocks and Boulders/Rocks/Prefabs/Rock4A.prefab";
@@ -243,6 +252,65 @@ public static class StonehillTwoHoleCourseBuilder
         911f,660f, 929f,654f, 944f,663f, 949f,685f,
         946f,710f, 935f,729f, 920f,721f, 912f,700f
     });
+
+    // North-up orthophoto polygons. Hole 1 and Hole 7 are anchored by the
+    // user's yellow traced references; the remaining areas were identified by
+    // matching their pale, fractured bedrock signature in the native 20 cm
+    // orthomosaic. These are deliberately broader than the visible stone so
+    // terrain slope can control the final shelf/cut blend.
+    private static readonly Vector2[][] RockCutZones =
+    {
+        SvgPolygon(new float[]
+        {
+            300f,666f, 325f,635f, 370f,620f, 425f,612f, 485f,616f,
+            545f,620f, 610f,620f, 680f,625f, 725f,638f, 735f,654f,
+            695f,664f, 640f,660f, 585f,653f, 525f,651f, 468f,660f,
+            410f,671f, 355f,681f, 315f,690f
+        }),
+        SvgPolygon(new float[]
+        {
+            345f,620f, 356f,578f, 380f,555f, 416f,560f,
+            432f,586f, 421f,616f, 390f,631f
+        }),
+        SvgPolygon(new float[]
+        {
+            285f,858f, 330f,840f, 385f,846f, 438f,870f, 492f,892f,
+            520f,925f, 507f,970f, 465f,997f, 408f,1007f, 350f,995f,
+            300f,968f, 278f,920f
+        }),
+        SvgPolygon(new float[]
+        {
+            520f,938f, 585f,925f, 655f,925f, 725f,932f, 795f,924f,
+            850f,941f, 861f,974f, 838f,1002f, 790f,1025f, 725f,1029f,
+            655f,1018f, 590f,1002f, 540f,982f
+        }),
+        SvgPolygon(new float[]
+        {
+            365f,1057f, 430f,1036f, 500f,1030f, 575f,1037f, 650f,1045f,
+            725f,1048f, 805f,1042f, 880f,1031f, 941f,1045f, 955f,1080f,
+            925f,1118f, 850f,1140f, 760f,1149f, 665f,1142f, 570f,1135f,
+            485f,1120f, 410f,1096f
+        }),
+        SvgPolygon(new float[]
+        {
+            996f,680f, 1040f,655f, 1095f,658f, 1110f,705f, 1102f,770f,
+            1092f,835f, 1100f,900f, 1085f,966f, 1048f,1008f, 1008f,982f,
+            1002f,918f, 1016f,850f, 1022f,780f
+        })
+    };
+
+    // Coarse woodland blocks follow canopy visible in the orthomosaic. The
+    // final objects are also checked against large turf, tee and water buffers,
+    // so a broad source polygon can never put a tree in a playing corridor.
+    private static readonly Vector2[][] WoodlandZones =
+    {
+        SvgPolygon(new float[] { 255f,590f, 445f,590f, 448f,690f, 405f,775f, 330f,835f, 255f,850f }),
+        SvgPolygon(new float[] { 690f,600f, 930f,600f, 982f,710f, 950f,820f, 855f,880f, 748f,850f, 700f,760f }),
+        SvgPolygon(new float[] { 255f,785f, 430f,780f, 505f,845f, 500f,960f, 420f,1035f, 300f,1035f, 250f,940f }),
+        SvgPolygon(new float[] { 700f,815f, 895f,805f, 975f,885f, 960f,1000f, 865f,1060f, 760f,1035f, 700f,945f }),
+        SvgPolygon(new float[] { 970f,590f, 1120f,590f, 1120f,1135f, 990f,1135f, 940f,1050f, 975f,950f, 990f,835f }),
+        SvgPolygon(new float[] { 250f,1000f, 420f,990f, 510f,1060f, 650f,1085f, 790f,1095f, 930f,1080f, 1000f,1148f, 250f,1148f })
+    };
 
     private static readonly Vector2[] Hole4Bunker = OrientedEllipse(new Vector2(492f, 2048f - 886f),
         Hole4Route[0] - Hole4Route[Hole4Route.Length - 1], 8f, 4f);
@@ -519,7 +587,10 @@ public static class StonehillTwoHoleCourseBuilder
         Texture2D grassNormal = LoadTexture(GrassNormalPath);
         Texture2D rockGrass = LoadTexture(RockGrassTexturePath);
         Texture2D rockGrassNormal = LoadTexture(RockGrassNormalPath);
+        Texture2D cliff = LoadTexture(CliffTexturePath);
+        Texture2D cliffNormal = LoadTexture(CliffNormalPath);
         Texture2D fairway = LoadTexture(FairwayTexturePath);
+        Texture2D semi = LoadTexture(SemiTexturePath);
         Texture2D green = LoadTexture(GreenTexturePath);
         Texture2D tee = LoadTexture(TeeTexturePath);
         Texture2D bunker = LoadTexture(BunkerTexturePath);
@@ -533,7 +604,9 @@ public static class StonehillTwoHoleCourseBuilder
             NewTerrainLayer(fairway, grassNormal, 12f),
             NewTerrainLayer(green, grassNormal, 8f),
             NewTerrainLayer(tee, grassNormal, 8f),
-            NewTerrainLayer(bunker, null, 7f)
+            NewTerrainLayer(bunker, null, 7f),
+            NewTerrainLayer(semi, grassNormal, 14f),
+            NewTerrainLayer(cliff, cliffNormal, 24f)
         };
 
         Vector2[][] routes = FrontNineRoutes();
@@ -553,7 +626,7 @@ public static class StonehillTwoHoleCourseBuilder
             teePolygons.Add(TeeRectangle(redTees[i], aim - redTees[i]));
         }
 
-        float[,,] weights = new float[data.alphamapHeight, data.alphamapWidth, 7];
+        float[,,] weights = new float[data.alphamapHeight, data.alphamapWidth, 9];
         for (int z = 0; z < data.alphamapHeight; z++)
         {
             for (int x = 0; x < data.alphamapWidth; x++)
@@ -561,16 +634,30 @@ public static class StonehillTwoHoleCourseBuilder
                 float nx = x / (float)(data.alphamapWidth - 1);
                 float nz = z / (float)(data.alphamapHeight - 1);
                 float slope = data.GetSteepness(nx, nz);
-                float rockWeight = Mathf.Clamp01((slope - 10f) / 30f) * 0.50f + 0.07f;
-                float aerialWeight = 0.035f;
-                float grassWeight = 1f - rockWeight - aerialWeight;
-                weights[z, x, 0] = Mathf.Max(0.10f, grassWeight);
-                weights[z, x, 1] = rockWeight;
-                weights[z, x, 2] = aerialWeight;
-
                 Vector2 worldPoint = new Vector2(
                     terrain.transform.position.x + nx * data.size.x,
                     terrain.transform.position.z + nz * data.size.z);
+                bool mappedRockCut = PointInAnyPolygon(worldPoint, RockCutZones);
+                float rockWeight = Mathf.Clamp01((slope - 10f) / 30f) * 0.46f + 0.045f;
+                float cliffWeight = 0f;
+                if (mappedRockCut)
+                {
+                    // Long shelves remain mottled rock/grass; only the steeper
+                    // faces receive the darker cliff material.
+                    rockWeight = Mathf.Max(rockWeight,
+                        Mathf.Lerp(0.38f, 0.72f, Mathf.Clamp01((slope - 5f) / 20f)));
+                    cliffWeight = Mathf.Lerp(0.04f, 0.36f,
+                        Mathf.Clamp01((slope - 15f) / 20f));
+                }
+                float aerialWeight = 0.006f;
+                float grassWeight = Mathf.Max(0.04f,
+                    1f - rockWeight - cliffWeight - aerialWeight);
+                float total = grassWeight + rockWeight + cliffWeight + aerialWeight;
+                weights[z, x, 0] = grassWeight / total;
+                weights[z, x, 1] = rockWeight / total;
+                weights[z, x, 2] = aerialWeight / total;
+                weights[z, x, 8] = cliffWeight / total;
+
                 if (worldPoint.x < 250f || worldPoint.x > 1100f ||
                     worldPoint.y < 900f || worldPoint.y > 1460f)
                     continue;
@@ -584,10 +671,14 @@ public static class StonehillTwoHoleCourseBuilder
                     paintedLayer = 5;
                 else if (PointInAnyPolygon(worldPoint, fairways))
                     paintedLayer = 3;
+                else if (IsInsideOrNearAnyPolygon(worldPoint, fairways, 6f) ||
+                    IsInsideOrNearAnyPolygon(worldPoint, greens, 4f) ||
+                    IsInsideOrNearAnyPolygon(worldPoint, teePolygons, 3f))
+                    paintedLayer = 7;
 
                 if (paintedLayer >= 0)
                 {
-                    for (int layer = 0; layer < 7; layer++)
+                    for (int layer = 0; layer < 9; layer++)
                         weights[z, x, layer] = 0f;
                     weights[z, x, paintedLayer] = 1f;
                 }
@@ -932,13 +1023,13 @@ public static class StonehillTwoHoleCourseBuilder
     {
         TerrainData data = terrain.terrainData;
         Texture2D wildGrass = LoadTexture(WildGrassTexturePath);
-        Texture2D dryGrass = LoadTexture(DryGrassTexturePath);
+        Texture2D meadowGrass = LoadTexture(DryGrassTexturePath);
         data.detailPrototypes = new[]
         {
-            NewGrassDetail(wildGrass, 0.55f, 1.15f,
-                new Color(0.30f, 0.43f, 0.19f, 1f), new Color(0.47f, 0.38f, 0.20f, 1f)),
-            NewGrassDetail(dryGrass, 0.45f, 0.90f,
-                new Color(0.36f, 0.43f, 0.21f, 1f), new Color(0.52f, 0.42f, 0.23f, 1f))
+            NewGrassDetail(wildGrass, 0.34f, 0.72f,
+                new Color(0.31f, 0.39f, 0.18f, 1f), new Color(0.48f, 0.39f, 0.21f, 1f)),
+            NewGrassDetail(meadowGrass, 0.38f, 0.82f,
+                new Color(0.35f, 0.47f, 0.22f, 1f), new Color(0.49f, 0.43f, 0.25f, 1f))
         };
         data.SetDetailResolution(512, 16);
 
@@ -955,21 +1046,28 @@ public static class StonehillTwoHoleCourseBuilder
                     terrain.transform.position.x + nx * data.size.x,
                     terrain.transform.position.z + nz * data.size.z);
                 if (point.x < 250f || point.x > 1100f || point.y < 900f || point.y > 1460f ||
-                    IsNearPlayingSurface(point, 7f) || IsNearAnyTee(point, 10f) || IsInsideWater(point) ||
+                    IsNearPlayingSurface(point, 10f) || IsNearAnyTee(point, 12f) || IsInsideWater(point) ||
                     data.GetSteepness(nx, nz) > 26f)
                     continue;
 
                 int hash = unchecked(x * 73856093 ^ z * 19349663 ^ 0x5f3759df) & 1023;
-                if (hash < 230)
+                bool rockMargin = PointInAnyPolygon(point, RockCutZones);
+                bool woodlandMargin = PointInAnyPolygon(point, WoodlandZones);
+                bool waterMargin = IsNearWater(point, 14f);
+                if (waterMargin && hash < 360)
                     wild[z, x] = 1 + (hash % 2);
-                else if (hash > 870)
+                else if (rockMargin && hash < 210)
+                    dry[z, x] = 1;
+                else if (woodlandMargin && hash < 165)
+                    wild[z, x] = 1;
+                else if (hash < 38)
                     dry[z, x] = 1;
             }
         }
         data.SetDetailLayer(0, 0, 0, wild);
         data.SetDetailLayer(0, 0, 1, dry);
         terrain.detailObjectDistance = 180f;
-        terrain.detailObjectDensity = 0.65f;
+        terrain.detailObjectDensity = 0.58f;
         EditorUtility.SetDirty(data);
         EditorUtility.SetDirty(terrain);
     }
@@ -994,56 +1092,74 @@ public static class StonehillTwoHoleCourseBuilder
 
     private static void AddExistingEnvironmentAssets(GameObject root, Terrain terrain)
     {
-        GameObject environment = NewParent("Environment - Stonehill Existing Assets", root.transform);
-        GameObject trees = NewParent("Young Birch Pine and Fir Mix", environment.transform);
-        GameObject rocks = NewParent("Small Canadian Shield Outcrops", environment.transform);
+        GameObject environment = NewParent("Environment - Orthomosaic Guided Existing Assets", root.transform);
+        GameObject trees = NewParent("Stonehill Birch Broadleaf and Pine Blocks", environment.transform);
+        GameObject rocks = NewParent("Terrain Integrated Canadian Shield Cuts", environment.transform);
 
         GameObject[] treePrefabs =
         {
-            LoadPrefab(BirchPrefabPath), LoadPrefab(ConiferPrefabPath), LoadPrefab(DouglasFirPrefabPath)
+            LoadPrefab(BirchPrefabPath), LoadPrefab(SmallBroadleafPrefabPath),
+            LoadPrefab(BroadleafPrefabPath), LoadPrefab(ConiferPrefabPath),
+            LoadPrefab(MaplePrefabPath), LoadPrefab(DouglasFirPrefabPath)
         };
         GameObject[] rockPrefabs =
         {
-            LoadPrefab(RockSinglePrefabPath), LoadPrefab(RockAlternatePrefabPath)
+            LoadPrefab(RockSinglePrefabPath), LoadPrefab(RockAlternatePrefabPath),
+            LoadPrefab(RockGroupPrefabPath)
         };
 
-        System.Random random = new System.Random(20250902);
+        System.Random random = new System.Random(20260904);
         int treesPlaced = 0;
-        for (int attempt = 0; attempt < 5000 && treesPlaced < 190; attempt++)
+        for (int attempt = 0; attempt < 16000 && treesPlaced < 340; attempt++)
         {
             Vector2 point = new Vector2(
                 Mathf.Lerp(265f, 1090f, (float)random.NextDouble()),
                 Mathf.Lerp(905f, 1455f, (float)random.NextDouble()));
-            if (IsNearPlayingSurface(point, 18f) || IsNearAnyTee(point, 18f) ||
-                IsInsideWater(point) || TerrainSlope(terrain, point) > 34f)
+            if (!PointInAnyPolygon(point, WoodlandZones) ||
+                IsNearPlayingSurface(point, 24f) || IsNearAnyTee(point, 22f) ||
+                IsNearWater(point, 6f) || TerrainSlope(terrain, point) > 36f)
+                continue;
+
+            // Bedrock shelves carry scrub and occasional young trees, not a
+            // continuous forest canopy.
+            if (PointInAnyPolygon(point, RockCutZones) && random.NextDouble() < 0.72)
                 continue;
 
             int choice = random.Next(100);
-            int prefabIndex = choice < 48 ? 0 : (choice < 82 ? 1 : 2);
-            float scale = Mathf.Lerp(0.48f, 0.90f, (float)random.NextDouble());
+            int prefabIndex = choice < 34 ? 0 :
+                (choice < 58 ? 1 : (choice < 70 ? 2 :
+                (choice < 90 ? 3 : (choice < 97 ? 4 : 5))));
+            float scale = Mathf.Lerp(0.44f, 0.82f, (float)random.NextDouble());
             PlaceEnvironmentPrefab(treePrefabs[prefabIndex], "Tree", treesPlaced,
                 point, scale, 0f, (float)random.NextDouble() * 360f, terrain, trees.transform);
             treesPlaced++;
         }
 
         int rocksPlaced = 0;
-        for (int attempt = 0; attempt < 4000 && rocksPlaced < 46; attempt++)
+        for (int attempt = 0; attempt < 9000 && rocksPlaced < 38; attempt++)
         {
             Vector2 point = new Vector2(
                 Mathf.Lerp(270f, 1080f, (float)random.NextDouble()),
                 Mathf.Lerp(910f, 1445f, (float)random.NextDouble()));
             float slope = TerrainSlope(terrain, point);
-            if (slope < 11f || slope > 38f || IsNearPlayingSurface(point, 24f) ||
-                IsNearAnyTee(point, 24f) || IsInsideWater(point))
+            if (!PointInAnyPolygon(point, RockCutZones) || slope < 7f || slope > 42f ||
+                IsNearPlayingSurface(point, 26f) || IsNearAnyTee(point, 24f) ||
+                IsNearWater(point, 5f))
                 continue;
 
-            float scale = Mathf.Lerp(0.14f, 0.30f, (float)random.NextDouble());
+            // The orthomosaic shows continuous shelves. Small, partially buried
+            // meshes add silhouette variation without creating fairway boulders.
+            float scale = rocksPlaced % 3 == 2
+                ? Mathf.Lerp(0.08f, 0.13f, (float)random.NextDouble())
+                : Mathf.Lerp(0.10f, 0.22f, (float)random.NextDouble());
             PlaceEnvironmentPrefab(rockPrefabs[rocksPlaced % rockPrefabs.Length], "Rock", rocksPlaced,
-                point, scale, -0.22f, (float)random.NextDouble() * 360f, terrain, rocks.transform);
+                point, scale, -0.34f, (float)random.NextDouble() * 360f, terrain, rocks.transform);
             rocksPlaced++;
         }
 
-        NewParent("PLACEMENT RULE - no trees within 18m or rocks within 24m of playing surfaces",
+        NewParent("PLACEMENT RULE - no trees within 24m or rocks within 26m of playing surfaces",
+            environment.transform);
+        NewParent("SOURCE - native orthomosaic plus user-traced Hole 1 and Hole 7 rock shelves",
             environment.transform);
     }
 
@@ -1197,6 +1313,11 @@ public static class StonehillTwoHoleCourseBuilder
         return false;
     }
 
+    private static bool IsNearWater(Vector2 point, float clearance)
+    {
+        return IsInsideOrNearAnyPolygon(point, FrontNineWaters(), clearance);
+    }
+
     private static bool IsNearAnyTee(Vector2 point, float clearance)
     {
         float clearanceSquared = clearance * clearance;
@@ -1225,6 +1346,17 @@ public static class StonehillTwoHoleCourseBuilder
                 : 0f;
             Vector2 closest = a + segment * t;
             if ((point - closest).sqrMagnitude <= clearanceSquared)
+                return true;
+        }
+        return false;
+    }
+
+    private static bool IsInsideOrNearAnyPolygon(
+        Vector2 point, IEnumerable<Vector2[]> polygons, float clearance)
+    {
+        foreach (Vector2[] polygon in polygons)
+        {
+            if (IsInsideOrNearPolygon(point, polygon, clearance))
                 return true;
         }
         return false;
