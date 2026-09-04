@@ -3,10 +3,30 @@ param(
     [Parameter(Mandatory = $true)][string]$TemplateCourseDirectory,
     [Parameter(Mandatory = $true)][string]$BundlePath,
     [Parameter(Mandatory = $true)][string]$TopImagePath,
-    [Parameter(Mandatory = $true)][string]$OutputDirectory
+    [Parameter(Mandatory = $true)][string]$OutputDirectory,
+    [string]$ReleaseManifestPath = (Join-Path $PSScriptRoot '..\CourseRelease.json')
 )
 
 $ErrorActionPreference = 'Stop'
+
+if (-not (Test-Path -LiteralPath $ReleaseManifestPath)) {
+    throw "Release manifest not found: $ReleaseManifestPath"
+}
+
+$release = Get-Content -Raw -LiteralPath $ReleaseManifestPath | ConvertFrom-Json
+foreach ($propertyName in @('courseFolder', 'courseName', 'version', 'updated')) {
+    if ([string]::IsNullOrWhiteSpace([string]$release.$propertyName)) {
+        throw "Release manifest is missing '$propertyName': $ReleaseManifestPath"
+    }
+}
+
+$releaseUpdated = [DateTimeOffset]::Parse(
+    [string]$release.updated,
+    [Globalization.CultureInfo]::InvariantCulture,
+    [Globalization.DateTimeStyles]::RoundtripKind)
+$courseFolder = [string]$release.courseFolder
+$courseName = [string]$release.courseName
+$courseVersion = [string]$release.version
 
 function Get-MarkerPosition {
     param([string]$SceneText, [string]$Name)
@@ -139,8 +159,8 @@ foreach ($polygon in $hazardPolygons) {
 
 $gkd = [ordered]@{}
 foreach ($property in $template.PSObject.Properties) { $gkd[$property.Name] = $property.Value }
-$gkd.SceneFolderName = 'Stonehill_9H'
-$gkd.CourseName = 'Stonehill Golf Club - Front Nine Beta'
+$gkd.SceneFolderName = $courseFolder
+$gkd.CourseName = $courseName
 $gkd.Designer = 'Stonehill / Codex GIS-first beta'
 $gkd.DescriptionTxtFileName = ''
 $gkd.CoursePar = 34
@@ -169,10 +189,10 @@ $gkd.TeeTypeTotalDistance = @(
 )
 
 New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
-$gkd | ConvertTo-Json -Depth 20 -Compress | Set-Content -LiteralPath (Join-Path $OutputDirectory 'Stonehill_9H.GKD') -NoNewline -Encoding UTF8
+$gkd | ConvertTo-Json -Depth 20 -Compress | Set-Content -LiteralPath (Join-Path $OutputDirectory "$courseFolder.GKD") -NoNewline -Encoding UTF8
 
 $details = (Get-Content -Raw -LiteralPath $templateDetailsPath).Trim().Split('|')
-$details[0] = 'Stonehill Golf Club - Front Nine Beta'
+$details[0] = $courseName
 $details[1] = 'Stonehill / Codex GIS-first beta'
 $details[3] = 'A rebuilt front-nine beta with annotated routing, official yardages, smoothed greens and tees, and mapped water hazards.'
 $details[7] = '34'
@@ -184,7 +204,8 @@ $details[82] = [string](($whiteYards | Measure-Object -Sum).Sum)
 $details[86] = [string](($redYards | Measure-Object -Sum).Sum)
 ($details -join '|') | Set-Content -LiteralPath (Join-Path $OutputDirectory 'coursedetails.txt') -NoNewline -Encoding UTF8
 
-Copy-Item -LiteralPath $BundlePath -Destination (Join-Path $OutputDirectory 'Stonehill_9H.gspcrse') -Force
+Copy-Item -LiteralPath $BundlePath -Destination (Join-Path $OutputDirectory "$courseFolder.gspcrse") -Force
+Copy-Item -LiteralPath $ReleaseManifestPath -Destination (Join-Path $OutputDirectory 'stonehill-release.json') -Force
 
 Add-Type -AssemblyName System.Drawing
 $sourceImage = [System.Drawing.Image]::FromFile($TopImagePath)
@@ -203,7 +224,8 @@ try {
         $small = [System.Drawing.Font]::new('Arial', 10, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
         $whiteBrush = [System.Drawing.SolidBrush]::new([System.Drawing.Color]::White)
         $graphics.DrawString('STONEHILL GOLF CLUB', $font, $whiteBrush, 14, 223)
-        $graphics.DrawString('Front Nine Beta • Sudbury, Ontario', $small, $whiteBrush, 16, 247)
+        $releaseLabel = "Front Nine Beta • v$courseVersion • $($releaseUpdated.ToString('yyyy-MM-dd'))"
+        $graphics.DrawString($releaseLabel, $small, $whiteBrush, 16, 247)
         $bitmap.Save((Join-Path $OutputDirectory 'splash template.jpg'), [System.Drawing.Imaging.ImageFormat]::Jpeg)
         $bitmap.Save((Join-Path $OutputDirectory 'image_altered_480_270splash template.jpg'), [System.Drawing.Imaging.ImageFormat]::Jpeg)
         $overlay.Dispose(); $font.Dispose(); $small.Dispose(); $whiteBrush.Dispose()
@@ -212,4 +234,4 @@ try {
 }
 finally { $sourceImage.Dispose() }
 
-Write-Output "METADATA_READY $OutputDirectory"
+Write-Output "METADATA_READY version=$courseVersion updated=$($releaseUpdated.ToString('yyyy-MM-dd')) output=$OutputDirectory"

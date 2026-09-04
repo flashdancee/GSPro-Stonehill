@@ -7,6 +7,12 @@
 > smoothed greens and tees. The routing is substantially improved but remains a
 > beta pending on-course photographs and playtesting.
 
+The currently installed course release is `0.3.0-beta.1` (updated 2026-09-04).
+Release identity is stored in `CourseRelease.json`; release notes are in
+`CHANGELOG.md`. The packaging script embeds that manifest in its output, and
+`Scripts/sync-gspro-course-metadata.ps1` populates the Version and Date Updated
+fields that GSPro leaves blank for sideloaded courses.
+
 This project is a true-scale reconstruction of Stonehill Golf Club in Sudbury,
 Ontario. The terrain extent covers the entire course, and the current playable
 checkpoint contains the front nine.
