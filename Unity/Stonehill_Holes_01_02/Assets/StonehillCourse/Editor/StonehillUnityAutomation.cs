@@ -154,13 +154,21 @@ public static class StonehillUnityAutomation
                     "Hole 1 red-tee view rendered."));
                 break;
 
+            case "capture-hole7-red-tee":
+                CaptureHoleSevenRedTeeImage();
+                WriteResponse(BuildResponse(
+                    command,
+                    true,
+                    "Hole 7 red-tee view rendered."));
+                break;
+
             default:
                 WriteResponse(BuildResponse(
                     command,
                     false,
                     "Unknown command. Allowed: validate, capture-validation, save-scene, " +
                     "open-stonehill-scene, apply-aerial, remove-aerial, build-front-nine, package-front-nine, " +
-                    "capture-hole1-red-tee."));
+                    "capture-hole1-red-tee, capture-hole7-red-tee."));
                 break;
         }
     }
@@ -290,6 +298,26 @@ public static class StonehillUnityAutomation
             1920,
             1080,
             Path.Combine(ArtifactDirectory, "hole-01-red-tee.png"));
+    }
+
+    private static void CaptureHoleSevenRedTeeImage()
+    {
+        Terrain terrain = UnityEngine.Object.FindObjectOfType<Terrain>();
+        if (terrain == null || terrain.terrainData == null)
+            throw new InvalidOperationException("No Unity Terrain with TerrainData is open.");
+
+        Directory.CreateDirectory(ArtifactDirectory);
+
+        Vector3 cameraPosition = new Vector3(566.3f, 34.5f, 994.8f);
+        Vector3 target = new Vector3(670f, 51.5f, 1001f);
+        RenderCamera(
+            cameraPosition,
+            Quaternion.LookRotation(target - cameraPosition, Vector3.up),
+            false,
+            0f,
+            1920,
+            1080,
+            Path.Combine(ArtifactDirectory, "hole-07-red-tee.png"));
     }
 
     private static void RenderCamera(

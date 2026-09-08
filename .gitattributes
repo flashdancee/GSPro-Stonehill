@@ -22,3 +22,7 @@
 *.hdr filter=lfs diff=lfs merge=lfs -text
 Unity/**/Assets/StonehillCourse/*.asset filter=lfs diff=lfs merge=lfs -text
 highlighted-stone-hill-panorama-full-transparent.png filter=lfs diff=lfs merge=lfs -text
+stone-hill-COOP2021-orthomosaic.jpg filter=lfs diff=lfs merge=lfs -text
+
+# Refinement assets include large nested TerrainData and masks.
+Unity/**/Assets/StonehillCourse/**/*.asset filter=lfs diff=lfs merge=lfs -text

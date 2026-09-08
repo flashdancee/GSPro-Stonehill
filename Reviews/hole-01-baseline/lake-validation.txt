@@ -1,0 +1,6 @@
+PASS: planar water, complete triangle coverage, zero terrain breakthroughs at 0.5m sampling (>0.8m from bank).
+Water level: 39.00205
+Shore vertices: 136
+Area m2: 5954.4765625
+Changed height samples (local basin and <=4m bank only): 7517
+UTC: 2026-09-08T00:29:17.0896177Z

@@ -7,6 +7,12 @@
 > smoothed greens and tees. The routing is substantially improved but remains a
 > beta pending on-course photographs and playtesting.
 
+The currently installed course release is `0.3.0-beta.1` (updated 2026-09-04).
+Release identity is stored in `CourseRelease.json`; release notes are in
+`CHANGELOG.md`. The packaging script embeds that manifest in its output, and
+`Scripts/sync-gspro-course-metadata.ps1` populates the Version and Date Updated
+fields that GSPro leaves blank for sideloaded courses.
+
 This project is a true-scale reconstruction of Stonehill Golf Club in Sudbury,
 Ontario. The terrain extent covers the entire course, and the current playable
 checkpoint contains the front nine.
@@ -20,6 +26,9 @@ checkpoint contains the front nine.
 - A true-scale, layered Inkscape SVG reference has been generated.
 - An openly licensed Ontario COOP 2021 orthophoto has been aligned at exactly
   one image pixel per terrain metre for spline tracing.
+- The native 15,000 × 15,000 COOP 2021 orthomosaic, world file, and projection
+  definition are retained as the authoritative 20 cm visual reference. They make
+  maintained turf, shorelines, paths, tree lines, and exposed bedrock traceable.
 - `highlighted-stone-hill-panorama-full-transparent.png` identifies the front-nine
   routing, hole numbers, tee areas, and water features supplied by the course user.
 - OPCD V4 BaseProject dated 2025-12-02 is unpacked as the Stonehill Unity project.
@@ -108,7 +117,8 @@ Codex session should begin with the prompt in `CONTINUE_ON_WINDOWS.md`.
 2. Verify the seven mapped water penalties, aiming, putting, and gimme behavior.
 3. Photograph each hole from its tees, landing area, approach, green, and hazards.
 4. Refine fairway/rough edges, bunker outlines, cart paths, vegetation, and rock
-   placement from those photographs.
+   placement from the native orthomosaic, then validate their appearance against
+   on-course photographs.
 5. Extend the same annotated, deterministic workflow to holes 10–18.
 
 ## Accuracy status

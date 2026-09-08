@@ -1,0 +1,37 @@
+[
+  {
+    "path": "stone-hill-COOP2021-orthomosaic.jpg",
+    "bytes": 44148465,
+    "sha256": "843550cb06ef29662eb9d9884ee41e49a0d767bd48cfb4dab713a50fea34a2e6"
+  },
+  {
+    "path": "stone-hill-COOP2021-orthomosaic.jgw",
+    "bytes": 36,
+    "sha256": "4e6f90e99e209876b56f69234673da987d4729dd15df70f5c7af6378e3b737ec"
+  },
+  {
+    "path": "stone-hill-COOP2021-orthomosaic.prj",
+    "bytes": 465,
+    "sha256": "92a8a15440deb035c0491d0a9145948a27f7874f900d32b3ecc0bc874660ca85"
+  },
+  {
+    "path": "highlighted-stone-hill-panorama-full-transparent.png",
+    "bytes": 32630184,
+    "sha256": "49437986b98eba4ddae77064f72b4fb796b3f69d07762e373ff956888df08dde"
+  },
+  {
+    "path": "QGIS/lidar_raw/stonehill_dtm_utm17_2048m_2049px.tif",
+    "bytes": 18943390,
+    "sha256": "60fce7ce418bc0ae4976da903ee864c0010421edf1285e4ed60481244b99633e"
+  },
+  {
+    "path": "References/Stonehill-Golf-Card_2025-back.jpg",
+    "bytes": 189319,
+    "sha256": "d490259aef875d0c051a65bbdcedc207c2827a7142faf94e9cbfd09422ba3b2c"
+  },
+  {
+    "path": "References/Stonehill-Golf-Card_2025-front.jpg",
+    "bytes": 230220,
+    "sha256": "846830bdad19e5310a2525f3415ed7bad26ba7a05f6fb9aac9a332928cb7f80c"
+  }
+]
