@@ -22,7 +22,7 @@
         },
         {
             "hole": 3,
-            "enabled": false,
+            "enabled": true,
             "seed": 20260911,
             "treeSpacing": 7.5,
             "treeHeightMin": 10.0,
