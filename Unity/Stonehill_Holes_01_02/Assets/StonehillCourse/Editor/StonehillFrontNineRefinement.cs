@@ -237,9 +237,10 @@ public static partial class StonehillTwoHoleCourseBuilder
             {
                 Vector2 p=new Vector2(terrain.transform.position.x+x*data.size.x/(r-1),terrain.transform.position.z+z*data.size.z/(r-1));
                 bool inside=PointInPolygon(p,shore);float d=DistanceToPolygon(p,shore);
-                if(!inside && (d>4 || IsNearPlayingSurface(p,1.5f) || IsNearAnyTee(p,4)))continue;
+                if(!inside && (d>4 || IsInsideOrNearAnyPolygon(p,FrontNineGreens(),1.5f) || IsNearAnyTee(p,4)))continue;
                 float old=terrain.transform.position.y+original[z,x]*data.size.y;
-                float target=inside?Mathf.Min(old,level-.4f-1.6f*Mathf.SmoothStep(0,1,Mathf.Clamp01(d/6))):Mathf.Lerp(level-.4f,old,Mathf.SmoothStep(0,1,d/4));
+                // Meet the water at the bank instead of creating a submerged rim/floating edge.
+                float target=inside?Mathf.Min(old,level-.03f-1.97f*Mathf.SmoothStep(0,1,Mathf.Clamp01(d/6))):Mathf.Lerp(level+.03f,old,Mathf.SmoothStep(0,1,d/4));
                 current[z,x]=(target-terrain.transform.position.y)/data.size.y;
             }
             double area=0;Vector3[] v=saved.vertices;int[] t=saved.triangles;
@@ -269,7 +270,7 @@ public static partial class StonehillTwoHoleCourseBuilder
             {Vector2 p=new Vector2((x+.5f)*data.size.x/dr,(z+.5f)*data.size.z/dr);foreach(Vector2[] s in shores)if(PointInPolygon(p,s)||DistanceToPolygon(p,s)<3){details[z,x]=0;break;}}
             data.SetDetailLayer(0,0,layer,details);
         }
-        ClipDrySurfaces(shores,report);
+        ClipDrySurfaces(terrain,shores,report);
         File.WriteAllText(Path.Combine(RefinementReview,"water-boundaries.json"),JsonUtility.ToJson(new WaterExport{waters=export.ToArray()},true));
         report.AppendLine("PASS: "+shores.Count+" refined waters planar, triangulated and clear of terrain on 0.5m interior samples; "+changed+" height samples changed only within basin/bank bounds.");
     }
@@ -290,7 +291,7 @@ public static partial class StonehillTwoHoleCourseBuilder
         }
         return result;
     }
-    private static void ClipDrySurfaces(List<Vector2[]> shores,StringBuilder report)
+    private static void ClipDrySurfaces(Terrain terrain,List<Vector2[]> shores,StringBuilder report)
     {
         var cuts=new List<Vector2[]>();var bounds=new List<Bounds>();
         foreach(Vector2[] s in shores)
@@ -308,7 +309,14 @@ public static partial class StonehillTwoHoleCourseBuilder
             var vertices=new List<Vector3>();var texture=new List<Vector2>();var triangles=new List<int>();bool affected=false;
             for(int i=0;i<st.Length;i+=3)
             {
-                var polygon=new List<ClipVertex>();for(int k=0;k<3;k++){int n=st[i+k];polygon.Add(new ClipVertex(c.transform.TransformPoint(sv[n]),uv.Length==sv.Length?uv[n]:Vector2.zero));}
+                var polygon=new List<ClipVertex>();for(int k=0;k<3;k++)
+                {
+                    int n=st[i+k];Vector3 world=c.transform.TransformPoint(sv[n]);Vector2 p=new Vector2(world.x,world.z);
+                    // The immediate fairway bank follows its reshaped terrain; do not leave a floating dry collider.
+                    if(c.name.StartsWith("Spline_Fairway_"))foreach(Vector2[] shore in shores)if(DistanceToPolygon(p,shore)<=4 && !IsInsideOrNearAnyPolygon(p,FrontNineGreens(),1.5f) && !IsNearAnyTee(p,4))
+                    {world.y=TerrainHeight(terrain,p)+.01f;affected=true;break;}
+                    polygon.Add(new ClipVertex(world,uv.Length==sv.Length?uv[n]:Vector2.zero));
+                }
                 Bounds box=new Bounds(polygon[0].p,Vector3.zero);foreach(ClipVertex v in polygon)box.Encapsulate(v.p);
                 var pieces=new List<List<ClipVertex>>{polygon};
                 for(int j=0;j<cuts.Count;j++)

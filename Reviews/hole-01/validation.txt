@@ -1,11 +1,12 @@
 Unity technical validation; GSPro shot testing pending.
-Shoreline polygon subtraction applied to 1 dry surface colliders; source meshes retained.
-PASS: 1 refined waters planar, triangulated and clear of terrain on 0.5m interior samples; 7528 height samples changed only within basin/bank bounds.
+Shoreline polygon subtraction applied to 2 dry surface colliders; source meshes retained.
+PASS: 2 refined waters planar, triangulated and clear of terrain on 0.5m interior samples; 10225 height samples changed only within basin/bank bounds.
 Hole 2 mature trees: 12
 Hole 3 mature trees: 39
+Hole 4 mature trees: 95
 PASS: visual pass preserves all elevations and mesh collider content.
 PASS: nine holes, eighteen tees and thirty-six pin markers.
-Height SHA256: 1FC4991E541AA6178735817C44AF03F00C383ECCA0A6F01105DD65556F557841
-Physics SHA256: E2D7E8E1EE69013FABF1B020D6C7BD8186C4FDA11D57AF9665BD73B7B910C545
-Managed memory bytes: 165871616
-UTC: 2026-09-08T12:06:01.7038420Z
+Height SHA256: 257334752273E75A5E64E32920533225FF6BA768956E1B207A92FD427D5796F9
+Physics SHA256: FC2F74214CD235B0724E4EED3432F8D81FE43C5456984916068CE38E7D5533C5
+Managed memory bytes: 174350336
+UTC: 2026-09-08T12:16:38.7013855Z
