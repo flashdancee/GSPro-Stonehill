@@ -44,3 +44,9 @@ Run `StonehillTwoHoleCourseBuilder.ValidateFullRebuild` to compare two complete 
 After committing the source used to build, run `Scripts/install-refined-course.ps1 -BundlePath <built bundle> -BackupDirectory <new unique directory>`. The script saves the installed bundle/GKD/release manifest together, verifies installation hashes and writes `Reviews/installation.json`. Keep encrypted packages and rollback packages outside Git. Back up the GSPro database before using the existing metadata-sync script.
 
 The source traces for Hole 6 upper pond and Hole 7 pond overlap existing playing-surface envelopes. Refinement trims those boundaries to preserve original tees and greens, and exports the same adjusted boundaries to GKD. These traces and remaining steep banks require photo review before visual acceptance.
+
+## Required evidence and image labels
+
+Use the [source register](References/SOURCES.md) and its hashed source manifest before every hole refinement: native orthomosaic/GIS terrain, the user's annotated rough/fairway/tee/hole-number panorama, and the supplied scorecard. Record how each was used and any unresolved discrepancy. Real-world photos supplement these sources; approximate outlines are not accepted as surveyed outlines.
+
+After each hole update, save at least tee and approach/green views under `Reviews/hole-NN` and show both directly in chat. Each caption must say **Hole NN — view — Unity render** or **Hole NN — view — actual GSPro screenshot**. Include the checkpoint/version when sharing revisions. Maintain [the image index](Reviews/README.md) and the hole README with descriptive links; filenames alone are not sufficient chat labels. Preserve earlier checkpoints in Git history.

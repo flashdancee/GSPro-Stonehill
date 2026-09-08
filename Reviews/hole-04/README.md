@@ -1,7 +1,12 @@
-# Hole 4 refinement
+# Hole 4 review imagery
 
-Unity renders: after-tee.png, after-approach.png, after-green.png; hazard views where applicable.
+Capture type: **Unity render**. These images are saved in this project for quick reference. All shot, penalty and putting tests await user acceptance.
 
-Technical validation is recorded in validation.txt. Awaiting user GSPro shot testing and real-world photos. Geometry remains the existing beta routing.
+| Image | Label |
+|---|---|
+| [after-approach.png](after-approach.png) | Hole 04 — approach — Unity render |
+| [after-green.png](after-green.png) | Hole 04 — green — Unity render |
+| [after-tee.png](after-tee.png) | Hole 04 — tee — Unity render |
+| [after-water-1.png](after-water-1.png) | Hole 04 — water 1 — Unity render |
 
-The source commit for this checkpoint is the commit containing this review directory; see Git history.
+[Validation notes](validation.txt). After-images represent the latest full rebuild; prior per-hole checkpoints remain in Git history. Geometry is provisional pending the registered sources and user photos.
