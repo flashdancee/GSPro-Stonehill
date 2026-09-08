@@ -316,8 +316,7 @@ public static partial class StonehillTwoHoleCourseBuilder
         Hole4Route[0] - Hole4Route[Hole4Route.Length - 1], 8f, 4f);
     private static readonly Vector2[] FrontNineTeeCenters = BuildFrontNineTeeCenters();
 
-    [MenuItem("Stonehill/Build Front-Nine Playable Course")]
-    public static void BuildPlayableCourse()
+    private static void BuildPlayableBase()
     {
         Terrain terrain = UnityEngine.Object.FindObjectOfType<Terrain>();
         if (terrain == null || terrain.terrainData == null)

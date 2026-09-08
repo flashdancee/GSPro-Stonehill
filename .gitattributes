@@ -23,3 +23,4 @@
 Unity/**/Assets/StonehillCourse/*.asset filter=lfs diff=lfs merge=lfs -text
 highlighted-stone-hill-panorama-full-transparent.png filter=lfs diff=lfs merge=lfs -text
 stone-hill-COOP2021-orthomosaic.jpg filter=lfs diff=lfs merge=lfs -text
+`n# Refinement assets include large nested TerrainData and masks.`nUnity/**/Assets/StonehillCourse/**/*.asset filter=lfs diff=lfs merge=lfs -text

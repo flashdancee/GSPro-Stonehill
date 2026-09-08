@@ -13,8 +13,7 @@ public static partial class StonehillTwoHoleCourseBuilder
     private const string DetailRoot = "Hole 01 - Mature woodland and fine turf";
     private static readonly string ReviewFolder = Path.GetFullPath(Path.Combine(Application.dataPath, "../StonehillArtifacts/HoleOneDetail"));
 
-    [MenuItem("Stonehill/Hole 1/Apply Detail and Capture")]
-    public static void ApplyHoleOneDetail()
+    private static void ApplyHoleOneDetailLegacy()
     {
         EditorSceneManager.OpenScene(FinalScenePath, OpenSceneMode.Single);
         Terrain terrain = UnityEngine.Object.FindObjectOfType<Terrain>();
@@ -43,6 +42,23 @@ public static partial class StonehillTwoHoleCourseBuilder
         int treeCount = PlantHoleOneWoodland(terrain, root.transform);
         AddHoleOneGrass(terrain);
         RefineHoleOneLake();
+        ConfigureRefinedLighting(terrain);
+        if (PhysicsSignature() != physicsBefore) throw new InvalidOperationException("Playing-surface physics changed");
+        float[,] heightsAfter = data.GetHeights(0,0,data.heightmapResolution,data.heightmapResolution);
+        for (int z=0; z<data.heightmapResolution; z++)
+            for (int x=0; x<data.heightmapResolution; x++)
+                if (heightsBefore[z,x] != heightsAfter[z,x]) throw new InvalidOperationException("Terrain elevation changed");
+        EditorUtility.SetDirty(data);
+        EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+        AssetDatabase.SaveAssets();
+        if (!EditorSceneManager.SaveScene(SceneManager.GetActiveScene())) throw new IOException("Scene save failed");
+        CaptureDetailViews(terrain, "after");
+        File.WriteAllText(Path.Combine(ReviewFolder,"validation.txt"), "PASS: terrain elevations identical; all playing-surface mesh/physics references and transforms identical.\nWoodland instances: " + treeCount + "\nScene: " + FinalScenePath + "\nUTC: " + DateTime.UtcNow.ToString("o"));
+        Debug.Log("HOLE_ONE_DETAIL_COMPLETE trees=" + treeCount);
+    }
+
+    private static void ConfigureRefinedLighting(Terrain terrain)
+    {
         // Daylight fill is needed for the package's cutout foliage and dark terrain.
         RenderSettings.ambientMode = AmbientMode.Trilight;
         RenderSettings.ambientSkyColor = new Color(0.63f,0.72f,0.82f);
@@ -78,18 +94,6 @@ public static partial class StonehillTwoHoleCourseBuilder
         terrain.heightmapPixelError = 2f;
         terrain.basemapDistance = 1000f;
         RenderSettings.fogColor = new Color(0.66f,0.76f,0.81f);
-        if (PhysicsSignature() != physicsBefore) throw new InvalidOperationException("Playing-surface physics changed");
-        float[,] heightsAfter = data.GetHeights(0,0,data.heightmapResolution,data.heightmapResolution);
-        for (int z=0; z<data.heightmapResolution; z++)
-            for (int x=0; x<data.heightmapResolution; x++)
-                if (heightsBefore[z,x] != heightsAfter[z,x]) throw new InvalidOperationException("Terrain elevation changed");
-        EditorUtility.SetDirty(data);
-        EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
-        AssetDatabase.SaveAssets();
-        if (!EditorSceneManager.SaveScene(SceneManager.GetActiveScene())) throw new IOException("Scene save failed");
-        CaptureDetailViews(terrain, "after");
-        File.WriteAllText(Path.Combine(ReviewFolder,"validation.txt"), "PASS: terrain elevations identical; all playing-surface mesh/physics references and transforms identical.\nWoodland instances: " + treeCount + "\nScene: " + FinalScenePath + "\nUTC: " + DateTime.UtcNow.ToString("o"));
-        Debug.Log("HOLE_ONE_DETAIL_COMPLETE trees=" + treeCount);
     }
 
     private static void SaveDetailAsset(UnityEngine.Object asset, string path)
