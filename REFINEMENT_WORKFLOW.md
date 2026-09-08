@@ -36,3 +36,11 @@ For each hole: red and white tee views toward the landing area; landing-area vie
 ## Scope
 
 Front nine first. Existing yardages/routing remain the baseline; evidence-backed geometric corrections receive separate notes. Back-nine construction follows front-nine acceptance.
+
+## Validated release commands
+
+Run `StonehillTwoHoleCourseBuilder.ValidateFullRebuild` to compare two complete source rebuilds and then repeated refinement. Run `python Scripts/validate-metadata.py <repository>` after synchronizing water boundaries. Legacy enabled flags on empty tee placeholders are preserved; only White and Red have playable positions and distances.
+
+After committing the source used to build, run `Scripts/install-refined-course.ps1 -BundlePath <built bundle> -BackupDirectory <new unique directory>`. The script saves the installed bundle/GKD/release manifest together, verifies installation hashes and writes `Reviews/installation.json`. Keep encrypted packages and rollback packages outside Git. Back up the GSPro database before using the existing metadata-sync script.
+
+The source traces for Hole 6 upper pond and Hole 7 pond overlap existing playing-surface envelopes. Refinement trims those boundaries to preserve original tees and greens, and exports the same adjusted boundaries to GKD. These traces and remaining steep banks require photo review before visual acceptance.

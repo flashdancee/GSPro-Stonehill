@@ -191,6 +191,12 @@ $gkd.TeeTypeTotalDistance = @(
 New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
 $gkd | ConvertTo-Json -Depth 20 -Compress | Set-Content -LiteralPath (Join-Path $OutputDirectory "$courseFolder.GKD") -NoNewline -Encoding UTF8
 
+# Use the exported refinement shorelines when building the refined course.
+$refinedBoundaryPath = Join-Path $PSScriptRoot '..\Reviews\water-boundaries.json'
+if (Test-Path -LiteralPath $refinedBoundaryPath) {
+    & (Join-Path $PSScriptRoot 'update-refined-hazards.ps1') -GkdPath (Join-Path $OutputDirectory "$courseFolder.GKD") -BoundaryPath $refinedBoundaryPath
+}
+
 $details = (Get-Content -Raw -LiteralPath $templateDetailsPath).Trim().Split('|')
 $details[0] = $courseName
 $details[1] = 'Stonehill / Codex GIS-first beta'

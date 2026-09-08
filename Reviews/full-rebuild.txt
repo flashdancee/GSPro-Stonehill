@@ -1,0 +1,1 @@
+PASS: two complete source rebuilds produce identical terrain, collider content and tree transforms; repeated refinement also passed.
