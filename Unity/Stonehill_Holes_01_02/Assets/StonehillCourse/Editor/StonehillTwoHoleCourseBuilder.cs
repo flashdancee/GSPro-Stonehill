@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 /// municipal orthophoto/DTM, the official 2025 scorecard, and GPS control points.
 /// The class name is retained so existing automation hooks remain compatible.
 /// </summary>
-public static class StonehillTwoHoleCourseBuilder
+public static partial class StonehillTwoHoleCourseBuilder
 {
     public const string FinalScenePath =
         "Assets/StonehillCourse/Scenes/Stonehill_9H.unity";
