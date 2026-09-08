@@ -12,4 +12,4 @@ Geometry is provisional for all holes pending photos. Every hole awaits user GSP
 | 6 | Technical pass | Smoothed; metadata aligned | Captured | codex/hole-06-refinement | Awaiting user |
 | 7 | Technical pass | Smoothed; metadata aligned | Captured | codex/hole-07-refinement | Awaiting user |
 | 8 | Technical pass | None mapped | Captured | codex/hole-08-refinement | Awaiting user |
-| 9 | Pending | Pending | Pending | Pending | Awaiting user |
+| 9 | Technical pass | Smoothed; metadata aligned | Captured | codex/hole-09-refinement | Awaiting user |
