@@ -117,6 +117,8 @@ public static partial class StonehillTwoHoleCourseBuilder
             foreach(string surface in new[]{"Fairway_Hole","Green_Hole"})
                 if(GameObject.Find("Spline_"+surface+n)==null) throw new InvalidOperationException("Missing surface "+n);
             foreach(string tee in new[]{"White","Red"}) if(GameObject.Find("Spline_Tee_Hole"+n+"_"+tee)==null) throw new InvalidOperationException("Missing tee "+n);
+            foreach(string name in new[]{"Spline_Green_Hole"+n,"Spline_Tee_Hole"+n+"_White","Spline_Tee_Hole"+n+"_Red"})
+            {Mesh source=AssetDatabase.LoadAssetAtPath<Mesh>(GeneratedFolder+"/"+name+".asset");if(GameObject.Find(name).GetComponent<MeshCollider>().sharedMesh!=source)throw new InvalidOperationException("Protected playing collider changed: "+name);}
         }
         int pins=0;
         foreach(Transform t in UnityEngine.Object.FindObjectsOfType<Transform>()) if(t.name.StartsWith("GK_H") && t.name.Contains("_Pin_")) pins++;
@@ -215,13 +217,19 @@ public static partial class StonehillTwoHoleCourseBuilder
         int r=data.heightmapResolution;float[,] current=data.GetHeights(0,0,r,r),original=baseline.GetHeights(0,0,r,r),before=(float[,])current.Clone();
         var shores=new List<Vector2[]>();var export=new List<WaterRecord>();var enabledIndices=new List<int>();
         Vector2[][] source=FrontNineWaters();
+        Vector2[][] previousShore=new Vector2[7][];for(int w=0;w<7;w++)previousShore[w]=SmoothLakeBoundary(source[w]);
+        // Restore only the previously owned source-water envelopes before replaying the union.
+        // This removes obsolete shaping when a protected shoreline is revised, without resetting the course.
+        for(int w=0;w<7;w++)if(settings.holes[WaterOwners[w]-1].enabled)
+        {Bounds b=PolygonBounds(source[w]);for(int z=Mathf.Max(0,(int)b.min.z-5);z<=Mathf.Min(r-1,(int)b.max.z+5);z++)for(int x=Mathf.Max(0,(int)b.min.x-5);x<=Mathf.Min(r-1,(int)b.max.x+5);x++)
+        {Vector2 p=new Vector2(x,z);if(PointInPolygon(p,source[w])||DistanceToPolygon(p,source[w])<=4||PointInPolygon(p,previousShore[w])||DistanceToPolygon(p,previousShore[w])<=4)current[z,x]=original[z,x];}}
         for(int w=0;w<7;w++)
         {
             GameObject water=GameObject.Find("Spline_Water_"+WaterNames[w]);
             if(water==null)throw new InvalidOperationException("Missing water "+WaterNames[w]);
             Mesh mesh=water.GetComponent<MeshFilter>().sharedMesh;
             float level=water.transform.TransformPoint(mesh.vertices[0]).y;
-            Vector2[] shore=settings.holes[WaterOwners[w]-1].enabled?SmoothLakeBoundary(source[w]):source[w];
+            Vector2[] shore=settings.holes[WaterOwners[w]-1].enabled?ProtectedWaterBoundary(source[w],terrain,report,WaterNames[w]):source[w];
             var record=new WaterRecord{name=WaterNames[w],coords=new Vector3[shore.Length]};
             for(int i=0;i<shore.Length;i++)record.coords[i]=new Vector3(shore[i].x,level,shore[i].y);export.Add(record);
             if(!settings.holes[WaterOwners[w]-1].enabled)continue;
@@ -237,7 +245,7 @@ public static partial class StonehillTwoHoleCourseBuilder
             {
                 Vector2 p=new Vector2(terrain.transform.position.x+x*data.size.x/(r-1),terrain.transform.position.z+z*data.size.z/(r-1));
                 bool inside=PointInPolygon(p,shore);float d=DistanceToPolygon(p,shore);
-                if(!inside && (d>4 || IsInsideOrNearAnyPolygon(p,FrontNineGreens(),1.5f) || IsNearAnyTee(p,4)))continue;
+                if(IsInsideOrNearAnyPolygon(p,FrontNineGreens(),1.5f) || IsNearAnyTee(p,4) || (!inside && d>4))continue;
                 float old=terrain.transform.position.y+original[z,x]*data.size.y;
                 // Meet the water at the bank instead of creating a submerged rim/floating edge.
                 float target=inside?Mathf.Min(old,level-.03f-1.97f*Mathf.SmoothStep(0,1,Mathf.Clamp01(d/6))):Mathf.Lerp(level+.03f,old,Mathf.SmoothStep(0,1,d/4));
@@ -253,7 +261,8 @@ public static partial class StonehillTwoHoleCourseBuilder
         for(int z=0;z<r;z++)for(int x=0;x<r;x++)if(before[z,x]!=current[z,x])
         {
             Vector2 p=new Vector2(x,z);bool allowed=false;
-            foreach(Vector2[] s in shores)if(PointInPolygon(p,s)||DistanceToPolygon(p,s)<=4.001f){allowed=true;break;}
+            foreach(int index in enabledIndices)if(PointInPolygon(p,source[index])||DistanceToPolygon(p,source[index])<=4.001f||PointInPolygon(p,previousShore[index])||DistanceToPolygon(p,previousShore[index])<=4.001f){allowed=true;break;}
+            if(!allowed)foreach(Vector2[] shore in shores)if(PointInPolygon(p,shore)||DistanceToPolygon(p,shore)<=4.001f){allowed=true;break;}
             if(!allowed)throw new InvalidOperationException("Water pass changed distant terrain");changed++;
         }
         for(int i=0;i<shores.Count;i++)
@@ -263,11 +272,12 @@ public static partial class StonehillTwoHoleCourseBuilder
             {Vector2 p=new Vector2(x,z);if(PointInPolygon(p,shore)&&DistanceToPolygon(p,shore)>.8f&&TerrainHeight(terrain,p)>=level-.015f)throw new InvalidOperationException("Terrain breakthrough "+WaterNames[enabledIndices[i]]);}
         }
         int dr=data.detailResolution;
+        var shoreBounds=new List<Bounds>();foreach(Vector2[] s in shores){Bounds b=PolygonBounds(s);b.Expand(new Vector3(8,0,8));shoreBounds.Add(b);}
         for(int layer=0;layer<data.detailPrototypes.Length;layer++)
         {
             int[,] details=data.GetDetailLayer(0,0,dr,dr,layer);
             for(int z=0;z<dr;z++)for(int x=0;x<dr;x++)
-            {Vector2 p=new Vector2((x+.5f)*data.size.x/dr,(z+.5f)*data.size.z/dr);foreach(Vector2[] s in shores)if(PointInPolygon(p,s)||DistanceToPolygon(p,s)<3){details[z,x]=0;break;}}
+            {Vector2 p=new Vector2((x+.5f)*data.size.x/dr,(z+.5f)*data.size.z/dr);for(int i=0;i<shores.Count;i++){Bounds b=shoreBounds[i];if(p.x<b.min.x||p.x>b.max.x||p.y<b.min.z||p.y>b.max.z)continue;if(PointInPolygon(p,shores[i])||DistanceToPolygon(p,shores[i])<3){details[z,x]=0;break;}}}
             data.SetDetailLayer(0,0,layer,details);
         }
         ClipDrySurfaces(terrain,shores,report);
@@ -278,6 +288,31 @@ public static partial class StonehillTwoHoleCourseBuilder
     {
         public Vector3 p; public Vector2 uv;
         public ClipVertex(Vector3 position,Vector2 texture){p=position;uv=texture;}
+    }
+    private static Vector2[] ProtectedWaterBoundary(Vector2[] source,Terrain terrain,StringBuilder report,string name)
+    {
+        var protectedShapes=new List<Vector2[]>(FrontNineGreens());
+        for(int h=1;h<=9;h++)foreach(string tee in new[]{"White","Red"})
+        {Vector3 c=GameObject.Find("Spline_Tee_Hole"+h.ToString("00")+"_"+tee).GetComponent<MeshRenderer>().bounds.center;Vector2 p=new Vector2(c.x,c.z);Vector2[] route=FrontNineRoutes()[h-1];protectedShapes.Add(TeeRectangle(p,route[route.Length-2]-p));}
+        Vector2[] result=source;
+        foreach(Vector2[] shape in protectedShapes)
+        {
+            bool overlap=false;foreach(Vector2 p in shape)if(PointInPolygon(p,result)||DistanceToPolygon(p,result)<2){overlap=true;break;}
+            if(!overlap)foreach(Vector2 p in result)if(PointInPolygon(p,shape)||DistanceToPolygon(p,shape)<2){overlap=true;break;}
+            if(!overlap)continue;
+            Vector2 center=PolygonCenter(result),protectedCenter=PolygonCenter(shape),direction=(protectedCenter-center).normalized;
+            if(direction.sqrMagnitude<.1f)throw new InvalidOperationException("Water encloses protected playing area: "+name);
+            float radius=0;foreach(Vector2 p in shape)radius=Mathf.Max(radius,Vector2.Distance(p,protectedCenter));
+            Vector2 plane=protectedCenter-direction*(radius+2),tangent=new Vector2(-direction.y,direction.x);
+            var polygon=new List<ClipVertex>();foreach(Vector2 p in result)polygon.Add(new ClipVertex(new Vector3(p.x,0,p.y),Vector2.zero));
+            Vector2 a=plane-tangent*1000,b=plane+tangent*1000;
+            bool keepPositive=LakeCross(b-a,center-a)>=0;
+            polygon=ClipHalf(polygon,a,b,keepPositive);
+            if(polygon.Count<3)throw new InvalidOperationException("No safe water remains: "+name);
+            result=new Vector2[polygon.Count];for(int i=0;i<result.Length;i++)result[i]=new Vector2(polygon[i].p.x,polygon[i].p.z);
+            report.AppendLine("Adjusted "+name+" shoreline to preserve an existing tee/green envelope; photo review required.");
+        }
+        return SmoothLakeBoundary(result);
     }
     private static List<ClipVertex> ClipHalf(List<ClipVertex> polygon,Vector2 a,Vector2 b,bool inside)
     {
@@ -294,6 +329,7 @@ public static partial class StonehillTwoHoleCourseBuilder
     private static void ClipDrySurfaces(Terrain terrain,List<Vector2[]> shores,StringBuilder report)
     {
         var cuts=new List<Vector2[]>();var bounds=new List<Bounds>();
+        var shorelineBounds=new List<Bounds>();foreach(Vector2[] s in shores){Bounds b=PolygonBounds(s);b.Expand(new Vector3(8,0,8));shorelineBounds.Add(b);}
         foreach(Vector2[] s in shores)
         {
             Mesh m=LakePolygonMesh(s,0);int[] ti=m.triangles;
@@ -305,6 +341,10 @@ public static partial class StonehillTwoHoleCourseBuilder
         {
             if(!c.name.StartsWith("Spline_")||c.name.StartsWith("Spline_Water_"))continue;
             Mesh source=AssetDatabase.LoadAssetAtPath<Mesh>(GeneratedFolder+"/"+c.name+".asset");if(source==null)throw new InvalidOperationException("Missing source collider "+c.name);
+            if(c.name.StartsWith("Spline_Tee_")||c.name.StartsWith("Spline_Green_")){c.sharedMesh=source;c.GetComponent<MeshFilter>().sharedMesh=source;continue;}
+            Bounds surfaceBounds=c.GetComponent<MeshRenderer>().bounds;bool near=false;
+            foreach(Bounds b in shorelineBounds)if(surfaceBounds.max.x>=b.min.x&&surfaceBounds.min.x<=b.max.x&&surfaceBounds.max.z>=b.min.z&&surfaceBounds.min.z<=b.max.z){near=true;break;}
+            if(!near){c.sharedMesh=source;c.GetComponent<MeshFilter>().sharedMesh=source;continue;}
             Vector3[] sv=source.vertices;Vector2[] uv=source.uv;int[] st=source.triangles;
             var vertices=new List<Vector3>();var texture=new List<Vector2>();var triangles=new List<int>();bool affected=false;
             for(int i=0;i<st.Length;i+=3)
@@ -313,8 +353,8 @@ public static partial class StonehillTwoHoleCourseBuilder
                 {
                     int n=st[i+k];Vector3 world=c.transform.TransformPoint(sv[n]);Vector2 p=new Vector2(world.x,world.z);
                     // The immediate fairway bank follows its reshaped terrain; do not leave a floating dry collider.
-                    if(c.name.StartsWith("Spline_Fairway_"))foreach(Vector2[] shore in shores)if(DistanceToPolygon(p,shore)<=4 && !IsInsideOrNearAnyPolygon(p,FrontNineGreens(),1.5f) && !IsNearAnyTee(p,4))
-                    {world.y=TerrainHeight(terrain,p)+.01f;affected=true;break;}
+                    if(c.name.StartsWith("Spline_Fairway_"))for(int j=0;j<shores.Count;j++)
+                    {Bounds b=shorelineBounds[j];if(p.x<b.min.x||p.x>b.max.x||p.y<b.min.z||p.y>b.max.z)continue;if(DistanceToPolygon(p,shores[j])<=4 && !IsInsideOrNearAnyPolygon(p,FrontNineGreens(),1.5f) && !IsNearAnyTee(p,4)){world.y=TerrainHeight(terrain,p)+.01f;affected=true;break;}}
                     polygon.Add(new ClipVertex(world,uv.Length==sv.Length?uv[n]:Vector2.zero));
                 }
                 Bounds box=new Bounds(polygon[0].p,Vector3.zero);foreach(ClipVertex v in polygon)box.Encapsulate(v.p);
