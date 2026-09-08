@@ -368,10 +368,32 @@ public static partial class StonehillTwoHoleCourseBuilder
     }
     public static void ValidateRepeatability()
     {
+        ValidateClipCases();
         EditorSceneManager.OpenScene(FinalScenePath,OpenSceneMode.Single);Terrain t=UnityEngine.Object.FindObjectOfType<Terrain>();RefinementSettings s=ReadRefinementSettings();
         ApplyEnabledRefinements(t,s);string first=HeightHash(t)+RefinementPhysicsHash()+TreeSignature();ApplyEnabledRefinements(t,s);string second=HeightHash(t)+RefinementPhysicsHash()+TreeSignature();
         if(first!=second)throw new InvalidOperationException("Repeated refinement changed content");
         File.WriteAllText(Path.Combine(RefinementReview,"repeatability.txt"),"PASS: repeated refinement preserves terrain, collision geometry and tree transforms.\n");
+    }
+    public static void ValidateFullRebuild()
+    {
+        RebuildRefinedFrontNine();Terrain t=UnityEngine.Object.FindObjectOfType<Terrain>();string first=HeightHash(t)+RefinementPhysicsHash()+TreeSignature();
+        RebuildRefinedFrontNine();t=UnityEngine.Object.FindObjectOfType<Terrain>();string second=HeightHash(t)+RefinementPhysicsHash()+TreeSignature();
+        if(first!=second)throw new InvalidOperationException("Full rebuild changed terrain, physics or tree placement");
+        ValidateRepeatability();
+        File.WriteAllText(Path.Combine(RefinementReview,"full-rebuild.txt"),"PASS: two complete source rebuilds produce identical terrain, collider content and tree transforms; repeated refinement also passed.\n");
+    }
+    private static double ClipArea(List<ClipVertex> p)
+    {double a=0;for(int i=0;i<p.Count;i++){Vector3 v=p[i].p,w=p[(i+1)%p.Count].p;a+=(double)v.x*w.z-(double)w.x*v.z;}return Math.Abs(a)*.5;}
+    private static void ValidateClipCases()
+    {
+        // A right triangle of area 8 cut at x=1 must partition into areas 3.5 and 4.5.
+        var tri=new List<ClipVertex>{new ClipVertex(new Vector3(0,0,0),Vector2.zero),new ClipVertex(new Vector3(4,0,0),Vector2.right),new ClipVertex(new Vector3(0,0,4),Vector2.up)};
+        var inside=ClipHalf(tri,new Vector2(1,-1),new Vector2(1,5),true);var outside=ClipHalf(tri,new Vector2(1,-1),new Vector2(1,5),false);
+        if(Math.Abs(ClipArea(inside)-3.5)>.00001 || Math.Abs(ClipArea(outside)-4.5)>.00001)throw new InvalidOperationException("Shore crossing clipping test failed");
+        var disjoint=ClipHalf(tri,new Vector2(-1,-1),new Vector2(-1,5),true);
+        if(disjoint.Count!=0)throw new InvalidOperationException("Disjoint clipping test failed");
+        var edge=ClipHalf(tri,new Vector2(0,-1),new Vector2(0,5),false);
+        if(Math.Abs(ClipArea(edge)-8)>.00001)throw new InvalidOperationException("Coincident boundary clipping test failed");
     }
     private static string TreeSignature(){var rows=new List<string>();foreach(Transform t in UnityEngine.Object.FindObjectsOfType<Transform>())if(t.name.Contains(" mature ")||t.name.StartsWith("H1 "))rows.Add(t.name+"|"+t.position.ToString("R")+"|"+t.localScale.ToString("R")+"|"+t.rotation.ToString("R"));rows.Sort(StringComparer.Ordinal);return HashBytes(Encoding.UTF8.GetBytes(string.Join("\n",rows.ToArray())));}
 }

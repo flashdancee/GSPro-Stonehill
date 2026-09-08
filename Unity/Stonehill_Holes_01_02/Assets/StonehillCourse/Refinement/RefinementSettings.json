@@ -1,94 +1,94 @@
 {
-  "holes": [
-    {
-      "hole": 1,
-      "enabled": true,
-      "seed": 20260909,
-      "treeSpacing": 7.5,
-      "treeHeightMin": 10,
-      "treeHeightMax": 21,
-      "woodlandRadius": 105,
-      "cameraEye": 1.7
-    },
-    {
-      "hole": 2,
-      "enabled": false,
-      "seed": 20260910,
-      "treeSpacing": 7.5,
-      "treeHeightMin": 10,
-      "treeHeightMax": 21,
-      "woodlandRadius": 105,
-      "cameraEye": 1.7
-    },
-    {
-      "hole": 3,
-      "enabled": false,
-      "seed": 20260911,
-      "treeSpacing": 7.5,
-      "treeHeightMin": 10,
-      "treeHeightMax": 21,
-      "woodlandRadius": 105,
-      "cameraEye": 1.7
-    },
-    {
-      "hole": 4,
-      "enabled": false,
-      "seed": 20260912,
-      "treeSpacing": 7.5,
-      "treeHeightMin": 10,
-      "treeHeightMax": 21,
-      "woodlandRadius": 105,
-      "cameraEye": 1.7
-    },
-    {
-      "hole": 5,
-      "enabled": false,
-      "seed": 20260913,
-      "treeSpacing": 7.5,
-      "treeHeightMin": 10,
-      "treeHeightMax": 21,
-      "woodlandRadius": 105,
-      "cameraEye": 1.7
-    },
-    {
-      "hole": 6,
-      "enabled": false,
-      "seed": 20260914,
-      "treeSpacing": 7.5,
-      "treeHeightMin": 10,
-      "treeHeightMax": 21,
-      "woodlandRadius": 105,
-      "cameraEye": 1.7
-    },
-    {
-      "hole": 7,
-      "enabled": false,
-      "seed": 20260915,
-      "treeSpacing": 7.5,
-      "treeHeightMin": 10,
-      "treeHeightMax": 21,
-      "woodlandRadius": 105,
-      "cameraEye": 1.7
-    },
-    {
-      "hole": 8,
-      "enabled": false,
-      "seed": 20260916,
-      "treeSpacing": 7.5,
-      "treeHeightMin": 10,
-      "treeHeightMax": 21,
-      "woodlandRadius": 105,
-      "cameraEye": 1.7
-    },
-    {
-      "hole": 9,
-      "enabled": false,
-      "seed": 20260917,
-      "treeSpacing": 7.5,
-      "treeHeightMin": 10,
-      "treeHeightMax": 21,
-      "woodlandRadius": 105,
-      "cameraEye": 1.7
-    }
-  ]
+    "holes": [
+        {
+            "hole": 1,
+            "enabled": true,
+            "seed": 20260909,
+            "treeSpacing": 7.5,
+            "treeHeightMin": 10.0,
+            "treeHeightMax": 21.0,
+            "woodlandRadius": 105.0,
+            "cameraEye": 1.7000000476837159
+        },
+        {
+            "hole": 2,
+            "enabled": true,
+            "seed": 20260910,
+            "treeSpacing": 7.5,
+            "treeHeightMin": 10.0,
+            "treeHeightMax": 21.0,
+            "woodlandRadius": 105.0,
+            "cameraEye": 1.7000000476837159
+        },
+        {
+            "hole": 3,
+            "enabled": false,
+            "seed": 20260911,
+            "treeSpacing": 7.5,
+            "treeHeightMin": 10.0,
+            "treeHeightMax": 21.0,
+            "woodlandRadius": 105.0,
+            "cameraEye": 1.7000000476837159
+        },
+        {
+            "hole": 4,
+            "enabled": false,
+            "seed": 20260912,
+            "treeSpacing": 7.5,
+            "treeHeightMin": 10.0,
+            "treeHeightMax": 21.0,
+            "woodlandRadius": 105.0,
+            "cameraEye": 1.7000000476837159
+        },
+        {
+            "hole": 5,
+            "enabled": false,
+            "seed": 20260913,
+            "treeSpacing": 7.5,
+            "treeHeightMin": 10.0,
+            "treeHeightMax": 21.0,
+            "woodlandRadius": 105.0,
+            "cameraEye": 1.7000000476837159
+        },
+        {
+            "hole": 6,
+            "enabled": false,
+            "seed": 20260914,
+            "treeSpacing": 7.5,
+            "treeHeightMin": 10.0,
+            "treeHeightMax": 21.0,
+            "woodlandRadius": 105.0,
+            "cameraEye": 1.7000000476837159
+        },
+        {
+            "hole": 7,
+            "enabled": false,
+            "seed": 20260915,
+            "treeSpacing": 7.5,
+            "treeHeightMin": 10.0,
+            "treeHeightMax": 21.0,
+            "woodlandRadius": 105.0,
+            "cameraEye": 1.7000000476837159
+        },
+        {
+            "hole": 8,
+            "enabled": false,
+            "seed": 20260916,
+            "treeSpacing": 7.5,
+            "treeHeightMin": 10.0,
+            "treeHeightMax": 21.0,
+            "woodlandRadius": 105.0,
+            "cameraEye": 1.7000000476837159
+        },
+        {
+            "hole": 9,
+            "enabled": false,
+            "seed": 20260917,
+            "treeSpacing": 7.5,
+            "treeHeightMin": 10.0,
+            "treeHeightMax": 21.0,
+            "woodlandRadius": 105.0,
+            "cameraEye": 1.7000000476837159
+        }
+    ]
 }
