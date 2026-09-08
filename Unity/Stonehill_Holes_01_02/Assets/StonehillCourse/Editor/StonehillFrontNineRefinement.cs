@@ -293,7 +293,7 @@ public static partial class StonehillTwoHoleCourseBuilder
     {
         var protectedShapes=new List<Vector2[]>(FrontNineGreens());
         for(int h=1;h<=9;h++)foreach(string tee in new[]{"White","Red"})
-        {Vector3 c=GameObject.Find("Spline_Tee_Hole"+h.ToString("00")+"_"+tee).GetComponent<MeshRenderer>().bounds.center;Vector2 p=new Vector2(c.x,c.z);Vector2[] route=FrontNineRoutes()[h-1];protectedShapes.Add(TeeRectangle(p,route[route.Length-2]-p));}
+        {GameObject obj=GameObject.Find("Spline_Tee_Hole"+h.ToString("00")+"_"+tee);Mesh sourceMesh=AssetDatabase.LoadAssetAtPath<Mesh>(GeneratedFolder+"/"+obj.name+".asset");Vector3 c=obj.transform.TransformPoint(sourceMesh.bounds.center);Vector2 p=new Vector2(c.x,c.z);Vector2[] route=FrontNineRoutes()[h-1];protectedShapes.Add(TeeRectangle(p,route[route.Length-2]-p));}
         Vector2[] result=source;
         foreach(Vector2[] shape in protectedShapes)
         {
@@ -341,7 +341,7 @@ public static partial class StonehillTwoHoleCourseBuilder
         {
             if(!c.name.StartsWith("Spline_")||c.name.StartsWith("Spline_Water_"))continue;
             Mesh source=AssetDatabase.LoadAssetAtPath<Mesh>(GeneratedFolder+"/"+c.name+".asset");if(source==null)throw new InvalidOperationException("Missing source collider "+c.name);
-            if(c.name.StartsWith("Spline_Tee_")||c.name.StartsWith("Spline_Green_")){c.sharedMesh=source;c.GetComponent<MeshFilter>().sharedMesh=source;continue;}
+            if(c.name.StartsWith("Spline_Tee_")||c.name.StartsWith("Spline_Green_")){c.sharedMesh=source;c.GetComponent<MeshFilter>().sharedMesh=source;string retired=RefinementFolder+"/Clipped-"+c.name+".asset";if(AssetDatabase.LoadAssetAtPath<Mesh>(retired)!=null)AssetDatabase.DeleteAsset(retired);continue;}
             Bounds surfaceBounds=c.GetComponent<MeshRenderer>().bounds;bool near=false;
             foreach(Bounds b in shorelineBounds)if(surfaceBounds.max.x>=b.min.x&&surfaceBounds.min.x<=b.max.x&&surfaceBounds.max.z>=b.min.z&&surfaceBounds.min.z<=b.max.z){near=true;break;}
             if(!near){c.sharedMesh=source;c.GetComponent<MeshFilter>().sharedMesh=source;continue;}
@@ -366,8 +366,8 @@ public static partial class StonehillTwoHoleCourseBuilder
                     foreach(List<ClipVertex> piece in pieces)
                     {
                         var inner=piece;for(int edge=0;edge<3 && inner.Count>=3;edge++)
-                        {var outer=ClipHalf(inner,cut[edge],cut[(edge+1)%3],false);if(outer.Count>=3)remaining.Add(outer);inner=ClipHalf(inner,cut[edge],cut[(edge+1)%3],true);}
-                        if(inner.Count>=3)affected=true;
+                        {var outer=ClipHalf(inner,cut[edge],cut[(edge+1)%3],false);if(outer.Count>=3 && ClipArea(outer)>1e-7)remaining.Add(outer);inner=ClipHalf(inner,cut[edge],cut[(edge+1)%3],true);if(inner.Count>=3 && ClipArea(inner)<=1e-7)inner.Clear();}
+                        if(inner.Count>=3 && ClipArea(inner)>1e-7)affected=true;
                     }
                     pieces=remaining;if(pieces.Count==0)break;
                 }
