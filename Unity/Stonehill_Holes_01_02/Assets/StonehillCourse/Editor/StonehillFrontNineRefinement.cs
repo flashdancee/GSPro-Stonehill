@@ -365,6 +365,10 @@ public static partial class StonehillTwoHoleCourseBuilder
                     var remaining=new List<List<ClipVertex>>();Vector2[] cut=cuts[j];
                     foreach(List<ClipVertex> piece in pieces)
                     {
+                        // A disjoint triangle must leave the original piece intact. Splitting against
+                        // its infinite edge lines otherwise creates an unnecessary arrangement of fragments.
+                        var overlap=piece;for(int edge=0;edge<3 && overlap.Count>=3;edge++)overlap=ClipHalf(overlap,cut[edge],cut[(edge+1)%3],true);
+                        if(overlap.Count<3 || ClipArea(overlap)<=1e-6){remaining.Add(piece);continue;}
                         var inner=piece;for(int edge=0;edge<3 && inner.Count>=3;edge++)
                         {var outer=ClipHalf(inner,cut[edge],cut[(edge+1)%3],false);if(outer.Count>=3 && ClipArea(outer)>1e-7)remaining.Add(outer);inner=ClipHalf(inner,cut[edge],cut[(edge+1)%3],true);if(inner.Count>=3 && ClipArea(inner)<=1e-7)inner.Clear();}
                         if(inner.Count>=3 && ClipArea(inner)>1e-7)affected=true;
