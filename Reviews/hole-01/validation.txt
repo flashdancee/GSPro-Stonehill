@@ -2,17 +2,19 @@ Unity technical validation; GSPro shot testing pending.
 Adjusted Hole06_UpperPond shoreline to preserve an existing tee/green envelope; photo review required.
 Adjusted Hole06_UpperPond shoreline to preserve an existing tee/green envelope; photo review required.
 Adjusted Hole07_Pond shoreline to preserve an existing tee/green envelope; photo review required.
+Adjusted Hole07_Pond shoreline to preserve an existing tee/green envelope; photo review required.
 Shoreline polygon subtraction applied to 4 dry surface colliders; source meshes retained.
-PASS: 6 refined waters planar, triangulated and clear of terrain on 0.5m interior samples; 17465 height samples changed only within basin/bank bounds.
+PASS: 6 refined waters planar, triangulated and clear of terrain on 0.5m interior samples; 16706 height samples changed only within basin/bank bounds.
 Hole 2 mature trees: 12
 Hole 3 mature trees: 39
 Hole 4 mature trees: 95
 Hole 5 mature trees: 156
 Hole 6 mature trees: 18
 Hole 7 mature trees: 167
+Hole 8 mature trees: 99
 PASS: visual pass preserves all elevations and mesh collider content.
 PASS: nine holes, eighteen tees and thirty-six pin markers.
-Height SHA256: 38C012D2B7582F1FDC8208A44BA791C3D0B38F04B78FC9A2DF48D2C3AF5666C5
-Physics SHA256: 1DF49A6F1233DE10C75435FB3205251794C7215DA101D011B61C6E73F2E54193
-Managed memory bytes: 169459712
-UTC: 2026-09-08T16:33:22.9228169Z
+Height SHA256: E3959BB8CBA10A69B23A5787D0F2C9FFD2E1838DFDCB5E5C052D64D19BA3CB5B
+Physics SHA256: 37380A655BF6B796C066789F0BB8D3D54E3C274FCB5CBFD8639C2BA7DE52FE90
+Managed memory bytes: 186249216
+UTC: 2026-09-08T16:43:03.8537108Z
