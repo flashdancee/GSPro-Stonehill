@@ -10,7 +10,7 @@ assert sum(h['Par'] for h in holes)==34
 assert len(g['Hazards'])==g['hazardCount']==len(waters)==7
 for h in holes:
     playable=[t for t in h['Tees'] if t['Enabled'] and t['Distance']>0 and t['Position'] is not None]
-    assert {t['TeeType'] for t in playable}=={'White','Red'}
+    assert {t['TeeType'] for t in playable}=={'Blue','Red'}
     assert len(h['Pins'])==4
     assert any(t['TeeType']=='AimPoint1' and t['Position'] for t in h['Tees'])
     for v in [t['Position'] for t in playable]+[p['Position'] for p in h['Pins']]:
@@ -19,5 +19,5 @@ for h in holes:
 for hazard,water in zip(g['Hazards'],waters):
     assert hazard['pointCount']==len(water['coords'])
     assert hazard['coords']==water['coords']
-print('PASS: nine holes, par 34, white/red positioned tees, four pins each, aiming data and seven exact shoreline matches.')
-print('Legacy Enabled flags on zero-distance/positionless tee placeholders retained for compatibility; only white/red have playable positions.')
+print('PASS: nine holes, par 34, blue/red positioned tees, four pins each, aiming data and seven exact shoreline matches.')
+print('Legacy Enabled flags on zero-distance/positionless tee placeholders retained for compatibility; only blue/red have playable positions.')

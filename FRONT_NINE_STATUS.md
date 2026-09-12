@@ -25,3 +25,5 @@ Complete review: [PR #11](https://github.com/flashdancee/GSPro-Stonehill/pull/11
 - Runtime memory recorded. Frame-time capture pending Windows performance-tracing privileges.
 - [Source evidence and scorecard mapping](References/SOURCES.md); [labelled images by hole](Reviews/README.md).
 - Photo follow-ups: precise green/fairway outlines (especially holes 3–9), bunkers, paths, distinctive rocks/trees, steep water banks and the adjusted Hole 6 upper/Hole 7 pond traces.
+
+2026-09-12: Blue/Red naming approved by the user; metadata-only update 0.4.0-beta.2. [All 72 routed yardage combinations pass 5% tolerance](Reviews/yardage-audit.md).

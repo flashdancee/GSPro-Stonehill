@@ -118,9 +118,9 @@ for ($hole = 1; $hole -le 18; $hole++) {
 
     $tees = @(
         (New-TeeRecord 'Black' $true 0 $null),
-        (New-TeeRecord 'White' $true ($whiteYards[$hole - 1] * 0.9144) $white),
+        (New-TeeRecord 'White' $true 0 $null),
         (New-TeeRecord 'Green' $true 0 $null),
-        (New-TeeRecord 'Blue' $true 0 $null),
+        (New-TeeRecord 'Blue' $true ($whiteYards[$hole - 1] * 0.9144) $white),
         (New-TeeRecord 'Yellow' $true 0 $null),
         (New-TeeRecord 'Red' $true ($redYards[$hole - 1] * 0.9144) $red),
         (New-TeeRecord 'Junior' $true 0 $null),
@@ -159,6 +159,9 @@ foreach ($polygon in $hazardPolygons) {
 
 $gkd = [ordered]@{}
 foreach ($property in $template.PSObject.Properties) { $gkd[$property.Name] = $property.Value }
+# Legacy Unity marker names remain White; exported playable tees are Blue.
+$gkd.BlueSR = $gkd.WhiteSR
+$gkd.WhiteSR = '0.0/0'
 $gkd.SceneFolderName = $courseFolder
 $gkd.CourseName = $courseName
 $gkd.Designer = 'Stonehill / Codex GIS-first beta'
@@ -179,9 +182,9 @@ $gkd.Holes = $holes
 $gkd.Hazards = $hazards
 $gkd.TeeTypeTotalDistance = @(
     (New-TeeRecord 'Black' $true 0 $null),
-    (New-TeeRecord 'White' $true (($whiteYards | Measure-Object -Sum).Sum * 0.9144) $null),
+    (New-TeeRecord 'White' $true 0 $null),
     (New-TeeRecord 'Green' $true 0 $null),
-    (New-TeeRecord 'Blue' $true 0 $null),
+    (New-TeeRecord 'Blue' $true (($whiteYards | Measure-Object -Sum).Sum * 0.9144) $null),
     (New-TeeRecord 'Yellow' $true 0 $null),
     (New-TeeRecord 'Red' $true (($redYards | Measure-Object -Sum).Sum * 0.9144) $null),
     (New-TeeRecord 'Junior' $true 0 $null),
@@ -206,7 +209,12 @@ for ($i = 0; $i -lt 18; $i++) {
     $details[8 + $i] = if ($i -lt 9) { [string]$pars[$i] } else { '0' }
     $details[26 + $i] = if ($i -lt 9) { [string]$indexes[$i] } else { '0' }
 }
-$details[82] = [string](($whiteYards | Measure-Object -Sum).Sum)
+$details[50] = $details[46]
+$details[51] = $details[47]
+$details[46] = '0.0'
+$details[47] = '0'
+$details[82] = '0'
+$details[84] = [string](($whiteYards | Measure-Object -Sum).Sum)
 $details[86] = [string](($redYards | Measure-Object -Sum).Sum)
 ($details -join '|') | Set-Content -LiteralPath (Join-Path $OutputDirectory 'coursedetails.txt') -NoNewline -Encoding UTF8
 
