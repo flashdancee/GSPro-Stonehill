@@ -80,3 +80,6 @@ For each hole compare the annotated routing with the georeferenced orthomosaic a
 - The Perfect Lie, “Building GSPro Courses — Complete Guide,” updated 2026
 - Between Two Biomes GSPro Golf Course Design tutorials
 - OPCD V4 workflow: LiDAR → Inkscape → Blender → Unity → GreenKeeper
+
+## Tee naming decision — 2026-09-12
+The user confirmed Blue/Red labels. Version 0.4.0-beta.2 exports Blue instead of White with identical positions and distances. Earlier White-labelled captures remain historical. See [yardage audit](../Reviews/yardage-audit.md).

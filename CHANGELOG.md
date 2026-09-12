@@ -1,5 +1,11 @@
 # Stonehill course releases
 
+## 0.4.0-beta.2 - 2026-09-12
+
+- Renamed the longer GSPro tees from White to Blue to match the supplied scorecard. Metadata-only update; positions and course bundle unchanged.
+- Verified all stored yardages match the card exactly and all 72 routed tee/pin combinations are within 5% (maximum 1.96%).
+
+
 ## 0.4.0-beta.1 - 2026-09-08
 
 - Generalized Hole 1's refinement into deterministic per-hole turf, woodland and review-camera settings for all nine holes.

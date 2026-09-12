@@ -1,29 +1,35 @@
 {
-  "version": "0.4.0-beta.1",
-  "sourceCommit": "97f8ad3c9c9fd356f61d23043fd125c14b25e1dc",
-  "installedUtc": "2026-09-08T21:23:23.728539Z",
+  "version": "0.4.0-beta.2",
+  "sourceCommit": "a60c3f25cfdcd8af6bda46a6cb55924573b0d30c",
+  "installedUtc": "2026-09-12T18:42:37.3659676Z",
   "packageSha256": "05541DDFF1FF9903DBF2C72A24FE78CEA33CE2E4A1BEBA6861F62657849FB121",
-  "gkdSha256": "6B4410E679A74E67819D0DDA7FAAC7E585779027E3912E4251E3B65E9D1FBFA7",
-  "backupDirectory": "C:\\Users\\mac32\\Documents\\ChatGPT\\GSPro-Courses\\artifacts\\backups\\front-nine-release-20260908-1700",
+  "gkdSha256": "FCE99504AE3EE233824333F2E76F8364177F08F2622F3628BFB4E0D7254BDBFA",
+  "backupDirectory": "C:\\Users\\mac32\\Documents\\ChatGPT\\GSPro-Courses\\artifacts\\backups\\blue-tees-20260912",
   "destination": "C:\\GSProV1\\Core\\GSP\\Courses\\Stonehill_9H",
   "gsproPlaytest": "Awaiting user",
-  "runtimeInspection": "GSPro 3.1.6.20 loaded installed package; Hole 1 tee and approach flyover inspected and captured. Remaining holes have Unity captures; user playtests pending.",
+  "runtimeInspection": "Pending",
+  "bundleSourceCommit": "97f8ad3c9c9fd356f61d23043fd125c14b25e1dc",
+  "note": "Metadata-only Blue tee rename; encrypted bundle unchanged. Reload GSPro to display new tee labels.",
   "rollbackHashes": [
     {
+      "file": "coursedetails.txt",
+      "sha256": "78C38DE3A622727111FAF3FFFDE84ACE922F1CD29C391B6D194D927A214AE2C7"
+    },
+    {
       "file": "GSPro.db",
-      "sha256": "3137BDD7DA51E7E8CE668718049D2D38FA4A382639CDC3C4B87FE95C308A0F80"
+      "sha256": "588374C3ED6B4EFBD5879209FDE522E3E3D22BF134FC8852F076D660F3B1BB77"
     },
     {
       "file": "Stonehill_9H.GKD",
-      "sha256": "BD4E5E3C2A0B51687BDA7630086301A8E57E31E0230D99005195AAC90BA58E55"
+      "sha256": "6B4410E679A74E67819D0DDA7FAAC7E585779027E3912E4251E3B65E9D1FBFA7"
     },
     {
       "file": "Stonehill_9H.gspcrse",
-      "sha256": "B8171AF47A93FDC5577FA92C2E723FCF465C6177A564300902607344953BACD8"
+      "sha256": "05541DDFF1FF9903DBF2C72A24FE78CEA33CE2E4A1BEBA6861F62657849FB121"
     },
     {
       "file": "stonehill-release.json",
-      "sha256": "F9973BEDF98E2B435F0F945142C5C479A0789ABCFFE8D327CAD702F56D1C7446"
+      "sha256": "8BE6BEB5CBE287C24081BEAFB98C9703FB8BCF5072C67457F29B2AEA5166A4F1"
     }
   ]
 }
