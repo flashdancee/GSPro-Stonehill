@@ -25,9 +25,14 @@ void surf(Input IN,inout SurfaceOutputStandard o)
  float3 tint=lerp(float3(0.22,0.34,0.12),float3(0.32,0.44,0.19),mask.g);
  float3 turf=tint*(0.67+grain*0.85+macro*0.16)*(1+(stripe-0.5)*lerp(0.12,0.025,mask.g));
  o.Albedo=lerp(o.Albedo,turf,cover);
+ // The alpha channel holds the photographed gravel cart tracks.
+ float grain2=tex2D(_FineGrass,p/0.17).g;
+ float broad=tex2D(_FineGrass,p/2.8).r;
+ float3 gravel=float3(0.37,0.36,0.33)*(0.70+grain2*0.38+broad*0.20);
+ o.Albedo=lerp(o.Albedo,gravel,saturate(mask.a));
  float3 fineNormal=UnpackNormal(tex2D(_FineNormal,p/0.45));
  fineNormal.xy*=0.13; fineNormal.z=sqrt(1-saturate(dot(fineNormal.xy,fineNormal.xy)));
- o.Normal=normalize(lerp(o.Normal,fineNormal,cover));
- o.Smoothness=lerp(o.Smoothness,0.08,cover);
+ o.Normal=normalize(lerp(o.Normal,fineNormal,saturate(cover+mask.a)));
+ o.Smoothness=lerp(o.Smoothness,0.08,saturate(cover+mask.a));
  o.Alpha=weight;
 }

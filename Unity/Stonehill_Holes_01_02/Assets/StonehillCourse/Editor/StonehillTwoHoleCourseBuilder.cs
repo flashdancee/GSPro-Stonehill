@@ -165,49 +165,51 @@ public static partial class StonehillTwoHoleCourseBuilder
         550f,768f, 500f,763f, 456f,759f
     });
 
+    // 2026 field photos supplied GPS camera positions. Coordinates below are
+    // north-up metres on the registered orthophoto; greens without a direct
+    // photo (3 and 6) use the visible turf and on-course sign distances.
     private static readonly Vector2[] Hole3Route = SvgPolyline(new float[]
     {
-        438f,879f, 480f,860f, 535f,850f, 600f,851f, 655f,856f, 695f,857f
+        510f,854f, 555f,850f, 610f,852f, 675f,853f, 755f,854f
     });
 
     private static readonly Vector2[] Hole4Route = SvgPolyline(new float[]
     {
-        711f,879f, 660f,873f, 605f,876f, 545f,885f, 485f,897f, 425f,910f
+        762f,875f, 720f,877f, 660f,880f, 600f,885f, 535f,892f, 470f,900f
     });
 
     private static readonly Vector2[] Hole5Route = SvgPolyline(new float[]
     {
-        802f,919f, 794f,890f, 784f,858f, 776f,830f, 767f,801f, 761f,782f
+        892f,925f, 875f,915f, 850f,899f, 825f,884f, 800f,870f, 778f,857f
     });
 
     private static readonly Vector2[] Hole6Route = SvgPolyline(new float[]
     {
-        675f,1005f, 708f,992f, 744f,976f, 778f,960f, 802f,949f
+        838f,1025f, 855f,1010f, 880f,988f, 910f,965f, 936f,952f
     });
 
     private static readonly Vector2[] Hole7Route = SvgPolyline(new float[]
     {
-        769f,1019f, 725f,1038f, 670f,1047f, 610f,1051f, 550f,1054f, 505f,1055f
+        930f,1087f, 900f,1060f, 850f,1045f, 800f,1060f, 760f,1080f, 732f,1086f
     });
 
     private static readonly Vector2[] Hole8Route = SvgPolyline(new float[]
     {
-        868f,987f, 846f,1011f, 820f,1038f, 791f,1066f, 763f,1090f
+        1015f,1013f, 1012f,1040f, 1008f,1070f, 1013f,1100f, 1018f,1130f
     });
 
     private static readonly Vector2[] Hole9Route = SvgPolyline(new float[]
     {
-        1015f,719f, 1018f,770f, 1015f,815f, 994f,854f,
-        960f,889f, 918f,923f, 876f,946f
+        907f,688f, 930f,745f, 958f,810f, 972f,875f, 976f,950f
     });
 
-    private static readonly Vector2[] Hole3Fairway = CorridorPolygon(Hole3Route, new[] { 10f, 17f, 22f, 24f, 18f, 7f });
-    private static readonly Vector2[] Hole4Fairway = CorridorPolygon(Hole4Route, new[] { 10f, 18f, 23f, 24f, 17f, 7f });
-    private static readonly Vector2[] Hole5Fairway = CorridorPolygon(Hole5Route, new[] { 10f, 15f, 19f, 18f, 12f, 7f });
-    private static readonly Vector2[] Hole6Fairway = CorridorPolygon(Hole6Route, new[] { 10f, 17f, 20f, 15f, 7f });
-    private static readonly Vector2[] Hole7Fairway = CorridorPolygon(Hole7Route, new[] { 10f, 18f, 23f, 24f, 16f, 7f });
-    private static readonly Vector2[] Hole8Fairway = CorridorPolygon(Hole8Route, new[] { 10f, 18f, 20f, 15f, 7f });
-    private static readonly Vector2[] Hole9Fairway = CorridorPolygon(Hole9Route, new[] { 11f, 16f, 22f, 24f, 22f, 15f, 7f });
+    private static readonly Vector2[] Hole3Fairway = CorridorPolygon(Hole3Route, new[] { 8f, 12f, 13f, 12f, 7f });
+    private static readonly Vector2[] Hole4Fairway = CorridorPolygon(Hole4Route, new[] { 9f, 14f, 16f, 16f, 13f, 7f });
+    private static readonly Vector2[] Hole5Fairway = CorridorPolygon(Hole5Route, new[] { 9f, 13f, 15f, 15f, 11f, 7f });
+    private static readonly Vector2[] Hole6Fairway = CorridorPolygon(Hole6Route, new[] { 9f, 14f, 16f, 13f, 7f });
+    private static readonly Vector2[] Hole7Fairway = CorridorPolygon(Hole7Route, new[] { 10f, 16f, 19f, 18f, 13f, 7f });
+    private static readonly Vector2[] Hole8Fairway = CorridorPolygon(Hole8Route, new[] { 9f, 12f, 14f, 12f, 7f });
+    private static readonly Vector2[] Hole9Fairway = CorridorPolygon(Hole9Route, new[] { 10f, 16f, 19f, 15f, 7f });
 
     private static readonly Vector2[] Hole3Green = OrientedEllipse(Hole3Route[0], Hole3Route[1] - Hole3Route[0], 10.5f, 8f);
     private static readonly Vector2[] Hole4Green = OrientedEllipse(Hole4Route[0], Hole4Route[1] - Hole4Route[0], 10.5f, 8f);
@@ -243,8 +245,9 @@ public static partial class StonehillTwoHoleCourseBuilder
 
     private static readonly Vector2[] Hole7Pond = SvgPolygon(new float[]
     {
-        728f,1078f, 752f,1068f, 783f,1066f, 817f,1074f, 839f,1088f,
-        829f,1102f, 800f,1110f, 762f,1108f, 735f,1097f
+        // Field photos show both tee decks above the west/south banks.
+        745f,1078f, 760f,1071f, 783f,1068f, 817f,1074f, 839f,1088f,
+        829f,1094f, 800f,1096f, 762f,1095f, 746f,1090f
     });
 
     private static readonly Vector2[] Hole9Pond = SvgPolygon(new float[]
@@ -308,6 +311,9 @@ public static partial class StonehillTwoHoleCourseBuilder
         SvgPolygon(new float[] { 690f,600f, 930f,600f, 982f,710f, 950f,820f, 855f,880f, 748f,850f, 700f,760f }),
         SvgPolygon(new float[] { 255f,785f, 430f,780f, 505f,845f, 500f,960f, 420f,1035f, 300f,1035f, 250f,940f }),
         SvgPolygon(new float[] { 700f,815f, 895f,805f, 975f,885f, 960f,1000f, 865f,1060f, 760f,1035f, 700f,945f }),
+        // Field views show tighter tree walls around Hole 3 than the broad 2021 canopy block captured.
+        SvgPolygon(new float[] { 505f,810f, 760f,809f, 768f,831f, 615f,829f, 505f,835f }),
+        SvgPolygon(new float[] { 505f,866f, 760f,862f, 762f,878f, 610f,878f, 505f,884f }),
         SvgPolygon(new float[] { 970f,590f, 1120f,590f, 1120f,1135f, 990f,1135f, 940f,1050f, 975f,950f, 990f,835f }),
         SvgPolygon(new float[] { 250f,1000f, 420f,990f, 510f,1060f, 650f,1085f, 790f,1095f, 930f,1080f, 1000f,1148f, 250f,1148f })
     };
@@ -326,8 +332,8 @@ public static partial class StonehillTwoHoleCourseBuilder
         Vector2[][] greens = FrontNineGreens();
         Vector2[][] routes = FrontNineRoutes();
         int[] pars = { 5, 4, 4, 4, 3, 3, 4, 3, 4 };
-        int[] whiteYards = { 471, 344, 287, 318, 156, 151, 290, 161, 310 };
-        int[] redYards = { 446, 308, 271, 293, 144, 132, 227, 128, 300 };
+        int[] whiteYards = { 446, 308, 271, 318, 144, 132, 227, 128, 300 };
+        int[] redYards = { 388, 272, 232, 293, 111, 95, 176, 96, 288 };
         Vector2[] whiteTees;
         Vector2[] redTees;
         BuildFrontNineTeePositions(routes, whiteYards, redYards, out whiteTees, out redTees);
@@ -387,7 +393,7 @@ public static partial class StonehillTwoHoleCourseBuilder
         AssetDatabase.Refresh();
         Selection.activeGameObject = root;
         Debug.Log("STONEHILL_FRONT_NINE_READY scene=" + FinalScenePath +
-                  " holes=9 tees=white/red yardages=official-2025");
+                  " holes=9 tees=two field positions yardages=2026-signs");
     }
 
     [MenuItem("Stonehill/Package Front-Nine Course Bundle")]
@@ -612,8 +618,8 @@ public static partial class StonehillTwoHoleCourseBuilder
         Vector2[][] fairways = FrontNineFairways();
         Vector2[][] greens = FrontNineGreens();
         Vector2[][] bunkers = FrontNineBunkers();
-        int[] whiteYards = { 471, 344, 287, 318, 156, 151, 290, 161, 310 };
-        int[] redYards = { 446, 308, 271, 293, 144, 132, 227, 128, 300 };
+        int[] whiteYards = { 446, 308, 271, 318, 144, 132, 227, 128, 300 };
+        int[] redYards = { 388, 272, 232, 293, 111, 95, 176, 96, 288 };
         Vector2[] whiteTees;
         Vector2[] redTees;
         BuildFrontNineTeePositions(routes, whiteYards, redYards, out whiteTees, out redTees);
@@ -991,7 +997,7 @@ public static partial class StonehillTwoHoleCourseBuilder
         NewParent("FRONT NINE ACTIVE - PAR 34", information.transform);
         NewParent("Official 2025 white yardages: 471, 344, 287, 318, 156, 151, 290, 161, 310", information.transform);
         NewParent("Official 2025 red yardages: 446, 308, 271, 293, 144, 132, 227, 128, 300", information.transform);
-        NewParent("White is the requested GSPro display name for Stonehill's published Blue tee", information.transform);
+        NewParent("2026 field photos: Black and Red markers share the men's position; Yellow is the women's position", information.transform);
         NewParent("Routing aligned from orthophoto, official map and independent GPS control points", information.transform);
     }
 
@@ -1412,8 +1418,8 @@ public static partial class StonehillTwoHoleCourseBuilder
     private static Vector2[] BuildFrontNineTeeCenters()
     {
         Vector2[][] routes = FrontNineRoutes();
-        int[] whiteYards = { 471, 344, 287, 318, 156, 151, 290, 161, 310 };
-        int[] redYards = { 446, 308, 271, 293, 144, 132, 227, 128, 300 };
+        int[] whiteYards = { 446, 308, 271, 318, 144, 132, 227, 128, 300 };
+        int[] redYards = { 388, 272, 232, 293, 111, 95, 176, 96, 288 };
         Vector2[] whiteTees;
         Vector2[] redTees;
         BuildFrontNineTeePositions(routes, whiteYards, redYards, out whiteTees, out redTees);
@@ -1433,15 +1439,21 @@ public static partial class StonehillTwoHoleCourseBuilder
         out Vector2[] whiteTees,
         out Vector2[] redTees)
     {
-        whiteTees = new Vector2[routes.Length];
-        redTees = new Vector2[routes.Length];
-        for (int i = 0; i < routes.Length; i++)
+        // Legacy White/Red Unity names mean the two physical tee positions.
+        // The export maps White to colocated Black and Red men's markers, and
+        // Red to the Yellow women's markers photographed on the course.
+        // Camera GPS is approximate; missing tees (4, 6 and 9 women) follow
+        // the registered orthophoto and nearby photographed turf.
+        whiteTees = SvgPolyline(new float[]
         {
-            // A route begins at its green. Walking the official scorecard distance
-            // along it makes the markers, tee decks, and metadata agree in world scale.
-            whiteTees[i] = PointAtDistanceFromStart(routes[i], whiteYards[i] * 0.9144f);
-            redTees[i] = PointAtDistanceFromStart(routes[i], redYards[i] * 0.9144f);
-        }
+            755f,705f, 490f,763f, 755f,854f, 470f,900f, 778f,857f,
+            936f,952f, 732f,1086f, 1018f,1130f, 976f,950f
+        });
+        redTees = SvgPolyline(new float[]
+        {
+            700f,675f, 518f,776f, 723f,844f, 495f,897f, 806f,875f,
+            917f,989f, 801f,1101f, 995f,1099f, 974f,940f
+        });
     }
 
     private static Vector2 PointAtFractionFromStart(Vector2[] route, float fraction)

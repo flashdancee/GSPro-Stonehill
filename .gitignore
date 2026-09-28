@@ -41,3 +41,6 @@ Thumbs.db
 
 
 Reviews/**/before-*.png
+
+# User's archived camera originals stay local; the named JPG set is the review source.
+/Source-Pictures/Original-HEIC/

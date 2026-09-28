@@ -91,7 +91,7 @@ public static partial class StonehillTwoHoleCourseBuilder
         string physics=RefinementPhysicsHash();
         string heights=HeightHash(terrain);
         ApplyCourseTurf(terrain,settings);
-        foreach(HoleRefinement h in settings.holes) if(h.enabled && h.hole>1)
+        foreach(HoleRefinement h in settings.holes) if(h.enabled)
             report.AppendLine("Hole "+h.hole+" mature trees: "+PlantRefinementTrees(terrain,h,settings));
         ConfigureRefinedLighting(terrain);
         if(heights!=HeightHash(terrain) || physics!=RefinementPhysicsHash()) throw new InvalidOperationException("Visual pass changed elevations or collider content");
@@ -130,6 +130,53 @@ public static partial class StonehillTwoHoleCourseBuilder
         for(int i=1;i<r.Length;i++) d=Mathf.Min(d,DistanceToSegment(p,r[i-1],r[i]));
         return d;
     }
+    // Cart track centres are read from the registered orthophoto and checked
+    // against the 2026 tee, fairway and green photos. They are visual only;
+    // ball physics remains the underlying rough/fairway mesh.
+    private static readonly Vector2[][] PhotoCartPaths =
+    {
+        SvgPolyline(new float[]{760f,700f, 720f,675f, 680f,660f, 630f,651f, 560f,650f, 500f,656f, 440f,680f, 390f,733f}),
+        SvgPolyline(new float[]{490f,760f, 550f,765f, 610f,780f, 675f,790f, 735f,815f, 765f,835f}),
+        SvgPolyline(new float[]{755f,850f, 705f,846f, 620f,841f, 560f,836f, 510f,835f}),
+        SvgPolyline(new float[]{480f,890f, 530f,885f, 600f,870f, 670f,870f, 725f,872f, 770f,870f}),
+        SvgPolyline(new float[]{780f,858f, 810f,878f, 845f,895f, 880f,910f, 912f,924f}),
+        SvgPolyline(new float[]{940f,954f, 927f,985f, 890f,1005f, 857f,1020f}),
+        SvgPolyline(new float[]{722f,1086f, 770f,1095f, 820f,1097f, 890f,1094f, 938f,1090f}),
+        SvgPolyline(new float[]{1020f,1130f, 1028f,1092f, 1036f,1050f, 1040f,1015f}),
+        SvgPolyline(new float[]{965f,951f, 955f,901f, 950f,850f, 941f,790f, 920f,731f, 900f,692f})
+    };
+
+    private static bool IsNearPhotoCartPath(Vector2 p,float clearance)
+    {
+        foreach(Vector2[] path in PhotoCartPaths)
+            for(int i=1;i<path.Length;i++)
+                if(DistanceToSegment(p,path[i-1],path[i])<clearance)return true;
+        return false;
+    }
+
+    private static void ApplyPhotoCartPaths(Color[] pixels,int width,int height,float left,float bottom,float wide,float tall)
+    {
+        foreach(Vector2[] path in PhotoCartPaths)
+        for(int i=1;i<path.Length;i++)
+        {
+            Vector2 a=path[i-1],b=path[i];
+            int minX=Mathf.Clamp(Mathf.FloorToInt((Mathf.Min(a.x,b.x)-3-left)*width/wide),0,width-1);
+            int maxX=Mathf.Clamp(Mathf.CeilToInt((Mathf.Max(a.x,b.x)+3-left)*width/wide),0,width-1);
+            int minZ=Mathf.Clamp(Mathf.FloorToInt((Mathf.Min(a.y,b.y)-3-bottom)*height/tall),0,height-1);
+            int maxZ=Mathf.Clamp(Mathf.CeilToInt((Mathf.Max(a.y,b.y)+3-bottom)*height/tall),0,height-1);
+            for(int z=minZ;z<=maxZ;z++)for(int x=minX;x<=maxX;x++)
+            {
+                Vector2 p=new Vector2(left+(x+.5f)*wide/width,bottom+(z+.5f)*tall/height);
+                float distance=DistanceToSegment(p,a,b);
+                float t=Mathf.Clamp01((distance-1.35f)/1.25f);
+                float value=1f-t*t*(3f-2f*t);
+                int index=z*width+x;Color c=pixels[index];
+                if(c.g>.02f || c.b>.02f)continue; // no gravel across greens or tee decks
+                c.a=Mathf.Max(c.a,value);pixels[index]=c;
+            }
+        }
+    }
+
     private static void ApplyCourseTurf(Terrain terrain,RefinementSettings settings)
     {
         // Recompute the union from source polygons, so neighbouring masks never overwrite one another.
@@ -163,6 +210,7 @@ public static partial class StonehillTwoHoleCourseBuilder
                 }
             }
         }
+        ApplyPhotoCartPaths(pixels,width,height,left,bottom,wide,tall);
         for(int i=0;i<pixels.Length;i++){Color c=pixels[i];c.r*=1-c.g;c.b*=1-c.g;pixels[i]=c;}
         mask.SetPixels(pixels);mask.Apply();SaveDetailAsset(mask,RefinementFolder+"/FrontNineTurfMask.asset");
         Material mat=new Material(Shader.Find("Stonehill/Detailed Terrain"));
@@ -187,14 +235,14 @@ public static partial class StonehillTwoHoleCourseBuilder
         for(float z=895;z<1460;z+=h.treeSpacing) for(float x=250;x<1125;x+=h.treeSpacing)
         {
             Vector2 p=new Vector2(x+((float)random.NextDouble()-.5f)*5,z+((float)random.NextDouble()-.5f)*5);
-            if(RouteDistance(p,h.hole)>h.woodlandRadius || !PointInAnyPolygon(p,WoodlandZones) || IsNearPlayingSurface(p,12) || IsNearAnyTee(p,16) || IsNearWater(p,6) || TerrainSlope(terrain,p)>40)continue;
+            if(RouteDistance(p,h.hole)>h.woodlandRadius || !PointInAnyPolygon(p,WoodlandZones) || IsNearPlayingSurface(p,4) || IsNearAnyTee(p,12) || IsNearWater(p,6) || IsNearPhotoCartPath(p,3.5f) || TerrainSlope(terrain,p)>40)continue;
             // Stable ownership independent of which holes are enabled; no duplicate shared belts.
-            int owner=2;float nearest=RouteDistance(p,2);
-            for(int j=3;j<=9;j++){float d=RouteDistance(p,j);if(d<nearest){nearest=d;owner=j;}}
-            if(owner!=h.hole || HoleOneDistance(p)<70)continue;
+            int owner=1;float nearest=RouteDistance(p,1);
+            for(int j=2;j<=9;j++){float d=RouteDistance(p,j);if(d<nearest){nearest=d;owner=j;}}
+            if(owner!=h.hole)continue;
             if(PointInAnyPolygon(p,RockCutZones) && random.NextDouble()<.75)continue;
             bool close=false;foreach(Vector2 q in placed)if(Vector2.Distance(p,q)<h.treeSpacing*.75f){close=true;break;}if(close)continue;
-            int choice=random.Next(100),species=choice<42?0:choice<69?1:choice<83?2:3;
+            int choice=random.Next(100),species=choice<43?0:choice<73?1:choice<94?2:3;
             GameObject tree=PrefabUtility.InstantiatePrefab(prefabs[species]) as GameObject;tree.name="H"+h.hole+" mature "+placed.Count.ToString("000");tree.transform.SetParent(root.transform,false);
             Renderer[] renderers=tree.GetComponentsInChildren<Renderer>();Bounds b=new Bounds();bool first=true;
             foreach(Renderer r in renderers){if(first){b=r.bounds;first=false;}else b.Encapsulate(r.bounds);}

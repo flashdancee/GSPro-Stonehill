@@ -83,3 +83,7 @@ For each hole compare the annotated routing with the georeferenced orthomosaic a
 
 ## Tee naming decision — 2026-09-12
 The user confirmed Blue/Red labels. Version 0.4.0-beta.2 exports Blue instead of White with identical positions and distances. Earlier White-labelled captures remain historical. See [yardage audit](../Reviews/yardage-audit.md).
+
+## On-course field photography — 2026-09-27
+
+The [45-photo register](field-photo-register.csv), [field observations](FIELD_PHOTOS.md), and [mapped camera positions](../Reviews/field-photo-map.jpg) now supplement the prior GIS sources. Original JPGs are in `Source-Pictures/` under Git LFS. Their retained EXIF coordinates identify **camera** locations, not exact hole centres. The 2026 signs and marker colours supersede the scorecard for the photographed holes. The scorecard table and 2026-09-12 Blue/Red decision above describe the earlier beta, not the current field-photo build.
