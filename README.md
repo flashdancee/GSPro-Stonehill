@@ -1,13 +1,13 @@
 # Stonehill GSPro course
 
-> **Current checkpoint (September 2026):** The front-nine beta has been rebuilt
-> from the annotated Stonehill panorama and installed in GSPro. It includes nine
-> enabled holes, official 2025 par and yardages, correctly spaced white/red tees,
-> four pins per hole, aim points, seven mapped penalty-water areas, and physically
-> smoothed greens and tees. The routing is substantially improved but remains a
-> beta pending on-course photographs and playtesting.
+> **Current source checkpoint (September 27, 2026):** The front nine has been
+> rebuilt from 45 geotagged on-course photos, photographed hole signs and the
+> registered orthophoto. GSPro offers two tees: Red at the shared red/black
+> men's position, and Yellow at the women's position. Photo-backed routing,
+> visual cart tracks and denser woodland are in source control. This is a review build pending
+> GSPro shot and putting tests, especially on the inferred greens of 3, 6 and 9.
 
-The currently installed course release is `0.3.0-beta.1` (updated 2026-09-04).
+The latest release is `0.5.0-beta.2`; its two-tee course is installed locally for GSPro testing.
 Release identity is stored in `CourseRelease.json`; release notes are in
 `CHANGELOG.md`. The packaging script embeds that manifest in its output, and
 `Scripts/sync-gspro-course-metadata.ps1` populates the Version and Date Updated

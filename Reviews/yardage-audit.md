@@ -1,5 +1,7 @@
 # Scorecard yardage audit — 2026-09-12
 
+Historical checkpoint: superseded by the September 27 field-photo build and photographed on-course signs. See [field observations](../References/FIELD_PHOTOS.md) for current marker colours and yardages.
+
 Stored GKD distances match the supplied scorecard exactly (metres converted at 0.9144 m/yd). Routed horizontal distances below sum tee → AimPoint1 → AimPoint2 when present → pin, for all four pins. These are geometry calculations, not a new GSPro UI measurement. Direct tee-to-pin distance cuts the doglegs on holes 1 and 9 and is not their playing length.
 
 | Hole | Blue card / stored yd | Blue route range yd | Red card / stored yd | Red route range yd | Largest difference |

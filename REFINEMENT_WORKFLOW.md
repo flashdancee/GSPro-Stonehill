@@ -21,7 +21,7 @@ Unity batch commands require the editor to be closed. Use `-batchmode -quit -pro
 
 ## Acceptance
 
-Technical validation covers water planarity and triangulation, half-metre interior terrain clearance, bounded terrain changes, visual-pass physics preservation, marker counts and deterministic reapplication. Review shore edges visually as well as checking interior samples. Validate GKD has nine enabled holes, two enabled tees per hole and four pins, and retains existing aiming data.
+Technical validation covers water planarity and triangulation, half-metre interior terrain clearance, bounded terrain changes, visual-pass physics preservation, marker counts and deterministic reapplication. Review shore edges visually as well as checking interior samples. Validate GKD has nine enabled holes, exactly two enabled tee types (Red and Yellow) per hole and four pins, and retains existing aiming data.
 
 Playtest status stays **awaiting user playtest** until the user confirms tee shots, hazard entry/drop behaviour and putting. Prioritize visual quality; record actual GSPro frame time, resolution/settings and memory without claiming Unity capture timing is gameplay performance.
 
@@ -31,7 +31,7 @@ For an installed regression restore the saved bundle and GKD pair and reload the
 
 ## Photos requested later
 
-For each hole: red and white tee views toward the landing area; landing-area view forward and back; approach; green from the front and looking back; hazards from both sides; distinctive trees, rock faces, bunkers, paths and elevation transitions. Label by hole, viewpoint and date. Note approximate camera location/direction when possible. Record uncertain shapes as provisional rather than inventing survey precision.
+For each hole: red and yellow tee views toward the landing area; landing-area view forward and back; approach; green from the front and looking back; hazards from both sides; distinctive trees, rock faces, bunkers, paths and elevation transitions. Label by hole, viewpoint and date. Note approximate camera location/direction when possible. Record uncertain shapes as provisional rather than inventing survey precision.
 
 ## Scope
 
@@ -39,7 +39,7 @@ Front nine first. Existing yardages/routing remain the baseline; evidence-backed
 
 ## Validated release commands
 
-Run `StonehillTwoHoleCourseBuilder.ValidateFullRebuild` to compare two complete source rebuilds and then repeated refinement. Run `python Scripts/validate-metadata.py <repository>` after synchronizing water boundaries. Legacy enabled flags on empty tee placeholders are preserved; only White and Red have playable positions and distances.
+Run `StonehillTwoHoleCourseBuilder.ValidateFullRebuild` to compare two complete source rebuilds and then repeated refinement. Run `python Scripts/validate-metadata.py <repository>` after synchronizing water boundaries. Empty tee placeholders are disabled; only Red and Yellow have playable positions and distances.
 
 After committing the source used to build, run `Scripts/install-refined-course.ps1 -BundlePath <built bundle> -BackupDirectory <new unique directory>`. The script saves the installed bundle/GKD/release manifest together, verifies installation hashes and writes `Reviews/installation.json`. Keep encrypted packages and rollback packages outside Git. Back up the GSPro database before using the existing metadata-sync script.
 
@@ -51,4 +51,4 @@ Use the [source register](References/SOURCES.md) and its hashed source manifest 
 
 After each hole update, save at least tee and approach/green views under `Reviews/hole-NN` and show both directly in chat. Each caption must say **Hole NN — view — Unity render** or **Hole NN — view — actual GSPro screenshot**. Include the checkpoint/version when sharing revisions. Maintain [the image index](Reviews/README.md) and the hole README with descriptive links; filenames alone are not sufficient chat labels. Preserve earlier checkpoints in Git history.
 
-As of 0.4.0-beta.2, playable GSPro tees are Blue/Red. Legacy Unity marker names remain White for source compatibility; build-front-nine-metadata.ps1 maps those markers to Blue. Validate exported labels with Scripts/validate-metadata.py.
+As of 0.5.0-beta.2, playable GSPro tees are Red/Yellow. Legacy Unity marker names remain White/Red for source compatibility; build-front-nine-metadata.ps1 maps those two positions to the photographed men's/women's selectors. Validate exported labels with Scripts/validate-metadata.py.

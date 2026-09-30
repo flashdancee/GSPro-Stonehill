@@ -1,6 +1,6 @@
 # Front-nine review images
 
-All files below are **Unity renders** from fixed review cameras. Actual GSPro screenshots use a separate `gspro` directory and are labelled explicitly. Source commit and earlier image versions are available in Git history.
+The [field-photo point map](field-photo-map.jpg) and [photo register](../References/FIELD_PHOTOS.md) show the latest real-world evidence. All files below are **Unity renders** from fixed review cameras. Actual GSPro screenshots use a separate `gspro` directory and are labelled explicitly. Source commit and earlier image versions are available in Git history.
 
 | Hole | Tee view | Approach view | Green view | Notes and hazards |
 |---|---|---|---|---|

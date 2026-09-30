@@ -81,20 +81,20 @@ $template = Get-Content -Raw -LiteralPath $templateGkdPath | ConvertFrom-Json
 
 $pars = @(5, 4, 4, 4, 3, 3, 4, 3, 4)
 $indexes = @(1, 3, 15, 7, 11, 9, 13, 17, 5)
-$whiteYards = @(471, 344, 287, 318, 156, 151, 290, 161, 310)
-$redYards = @(446, 308, 271, 293, 144, 132, 227, 128, 300)
+$whiteYards = @(446, 308, 271, 318, 144, 132, 227, 128, 300)
+$redYards = @(388, 272, 232, 293, 111, 95, 176, 96, 288)
 $pinDays = @('Thursday', 'Friday', 'Saturday', 'Sunday')
 
 $aims = @(
     [ordered]@{ A1 = @(625, 1374); A2 = @(485, 1362) },
     [ordered]@{ A1 = @(610, 1273); A2 = $null },
-    [ordered]@{ A1 = @(535, 1198); A2 = $null },
-    [ordered]@{ A1 = @(545, 1163); A2 = $null },
-    [ordered]@{ A1 = @(784, 1190); A2 = $null },
-    [ordered]@{ A1 = @(744, 1072); A2 = $null },
-    [ordered]@{ A1 = @(610, 997); A2 = $null },
-    [ordered]@{ A1 = @(820, 1010); A2 = $null },
-    [ordered]@{ A1 = @(960, 1159); A2 = @(1015, 1233) }
+    [ordered]@{ A1 = @(625, 1196); A2 = $null },
+    [ordered]@{ A1 = @(610, 1163); A2 = $null },
+    [ordered]@{ A1 = @(850, 1149); A2 = $null },
+    [ordered]@{ A1 = @(838, 1023); A2 = $null },
+    [ordered]@{ A1 = @(850, 1003); A2 = $null },
+    [ordered]@{ A1 = @(1008, 978); A2 = $null },
+    [ordered]@{ A1 = @(972, 1173); A2 = @(958, 1238) }
 )
 
 $holes = @()
@@ -117,14 +117,14 @@ for ($hole = 1; $hole -le 18; $hole++) {
         ((($pins | ForEach-Object { $_.Position.z } | Measure-Object -Average).Average) + 0.3)
 
     $tees = @(
-        (New-TeeRecord 'Black' $true 0 $null),
-        (New-TeeRecord 'White' $true 0 $null),
-        (New-TeeRecord 'Green' $true 0 $null),
-        (New-TeeRecord 'Blue' $true ($whiteYards[$hole - 1] * 0.9144) $white),
-        (New-TeeRecord 'Yellow' $true 0 $null),
-        (New-TeeRecord 'Red' $true ($redYards[$hole - 1] * 0.9144) $red),
-        (New-TeeRecord 'Junior' $true 0 $null),
-        (New-TeeRecord 'Par3' $true 0 $null)
+        (New-TeeRecord 'Black' $false 0 $null),
+        (New-TeeRecord 'White' $false 0 $null),
+        (New-TeeRecord 'Green' $false 0 $null),
+        (New-TeeRecord 'Blue' $false 0 $null),
+        (New-TeeRecord 'Yellow' $true ($redYards[$hole - 1] * 0.9144) $red),
+        (New-TeeRecord 'Red' $true ($whiteYards[$hole - 1] * 0.9144) $white),
+        (New-TeeRecord 'Junior' $false 0 $null),
+        (New-TeeRecord 'Par3' $false 0 $null)
     )
     $holeAims = $aims[$hole - 1]
     $aim1 = New-Position $holeAims.A1[0] $center.y $holeAims.A1[1]
@@ -150,7 +150,7 @@ $hazardPolygons += ,@(586,906, 610,899, 647,901, 685,908, 716,919, 704,933, 675,
 $hazardPolygons += ,@(970,827, 991,821, 1014,827, 1022,840, 1014,852, 991,855, 971,847)
 $hazardPolygons += ,@(873,936, 893,928, 911,936, 920,951, 914,968, 899,980, 883,970, 876,953)
 $hazardPolygons += ,@(823,972, 840,966, 855,975, 857,991, 846,1004, 830,1000, 820,987)
-$hazardPolygons += ,@(728,1078, 752,1068, 783,1066, 817,1074, 839,1088, 829,1102, 800,1110, 762,1108, 735,1097)
+$hazardPolygons += ,@(745,1078, 760,1071, 783,1068, 817,1074, 839,1088, 829,1094, 800,1096, 762,1095, 746,1090)
 $hazardPolygons += ,@(911,660, 929,654, 944,663, 949,685, 946,710, 935,729, 920,721, 912,700)
 $hazards = @()
 foreach ($polygon in $hazardPolygons) {
@@ -159,8 +159,12 @@ foreach ($polygon in $hazardPolygons) {
 
 $gkd = [ordered]@{}
 foreach ($property in $template.PSObject.Properties) { $gkd[$property.Name] = $property.Value }
-# Legacy Unity marker names remain White; exported playable tees are Blue.
-$gkd.BlueSR = $gkd.WhiteSR
+# Legacy Unity White/Red names identify men's/women's positions.
+# The photographed Black/Red men's position is one Red GSPro choice; Yellow is the women's choice.
+$gkd.YellowSR = $gkd.RedSR
+$gkd.BlackSR = '0.0/0'
+$gkd.RedSR = $gkd.WhiteSR
+$gkd.BlueSR = '0.0/0'
 $gkd.WhiteSR = '0.0/0'
 $gkd.SceneFolderName = $courseFolder
 $gkd.CourseName = $courseName
@@ -177,18 +181,18 @@ $gkd.pOOB = [ordered]@{
         (New-Position 1130 45 1490), (New-Position 225 45 1490)
     )
 }
-$gkd.CourseInfo = 'Front-nine rebuild using the annotated Stonehill panorama, 2023-24 DTM, 2021 orthophoto, official 2025 scorecard, and existing BaseProject assets.'
+$gkd.CourseInfo = 'Front-nine reconstruction using 45 on-course photos, photographed hole signs, the 2021 orthophoto, 2023-24 DTM, and existing BaseProject assets. Hole 4 yardage remains scorecard-based.'
 $gkd.Holes = $holes
 $gkd.Hazards = $hazards
 $gkd.TeeTypeTotalDistance = @(
-    (New-TeeRecord 'Black' $true 0 $null),
-    (New-TeeRecord 'White' $true 0 $null),
-    (New-TeeRecord 'Green' $true 0 $null),
-    (New-TeeRecord 'Blue' $true (($whiteYards | Measure-Object -Sum).Sum * 0.9144) $null),
-    (New-TeeRecord 'Yellow' $true 0 $null),
-    (New-TeeRecord 'Red' $true (($redYards | Measure-Object -Sum).Sum * 0.9144) $null),
-    (New-TeeRecord 'Junior' $true 0 $null),
-    (New-TeeRecord 'Par3' $true 0 $null)
+    (New-TeeRecord 'Black' $false 0 $null),
+    (New-TeeRecord 'White' $false 0 $null),
+    (New-TeeRecord 'Green' $false 0 $null),
+    (New-TeeRecord 'Blue' $false 0 $null),
+    (New-TeeRecord 'Yellow' $true (($redYards | Measure-Object -Sum).Sum * 0.9144) $null),
+    (New-TeeRecord 'Red' $true (($whiteYards | Measure-Object -Sum).Sum * 0.9144) $null),
+    (New-TeeRecord 'Junior' $false 0 $null),
+    (New-TeeRecord 'Par3' $false 0 $null)
 )
 
 New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
@@ -203,7 +207,7 @@ if (Test-Path -LiteralPath $refinedBoundaryPath) {
 $details = (Get-Content -Raw -LiteralPath $templateDetailsPath).Trim().Split('|')
 $details[0] = $courseName
 $details[1] = 'Stonehill / Codex GIS-first beta'
-$details[3] = 'A rebuilt front-nine beta with annotated routing, official yardages, smoothed greens and tees, and mapped water hazards.'
+$details[3] = 'A photo-guided front-nine beta with on-course sign yardages, two selectable tees, smoothed greens and mapped water hazards.'
 $details[7] = '34'
 for ($i = 0; $i -lt 18; $i++) {
     $details[8 + $i] = if ($i -lt 9) { [string]$pars[$i] } else { '0' }

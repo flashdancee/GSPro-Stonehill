@@ -1,5 +1,17 @@
 # Stonehill course releases
 
+## 0.5.0-beta.2 - 2026-09-30
+
+- Reduced GSPro's selectable tees to the two photographed playing positions: Red for the shared red/black men's markers and Yellow for the women's markers. Disabled all empty tee placeholders and set `teeTypeCount` to two.
+- Installed the September 27 field-photo course bundle with matching two-tee metadata for player testing. The bundle geometry is unchanged from 0.5.0-beta.1.
+
+## 0.5.0-beta.1 - 2026-09-27
+
+- Rebuilt front-nine tee, green, and fairway anchors from 45 geotagged on-course photographs, the registered orthophoto, and on-course hole signs. The previous scorecard-driven geometry remains in Git history.
+- Exported colocated Black and Red men's markers plus Yellow women's markers at two physical tee positions. Updated eight photographed sign yardage pairs; Hole 4 remains scorecard-based pending a sign photograph.
+- Added gravel cart tracks and denser deciduous woodland, with visual-only paths that preserve ball collision physics.
+- Preserved a hashed GPS/photo register and review map. Hole 3, 6, and 9 green placement and the adjusted water banks remain provisional pending GSPro playtesting.
+
 ## 0.4.0-beta.2 - 2026-09-12
 
 - Renamed the longer GSPro tees from White to Blue to match the supplied scorecard. Metadata-only update; positions and course bundle unchanged.
