@@ -1,35 +1,41 @@
 {
-  "version": "0.4.0-beta.2",
-  "sourceCommit": "a60c3f25cfdcd8af6bda46a6cb55924573b0d30c",
-  "installedUtc": "2026-09-12T18:42:37.3659676Z",
-  "packageSha256": "05541DDFF1FF9903DBF2C72A24FE78CEA33CE2E4A1BEBA6861F62657849FB121",
-  "gkdSha256": "FCE99504AE3EE233824333F2E76F8364177F08F2622F3628BFB4E0D7254BDBFA",
-  "backupDirectory": "C:\\Users\\mac32\\Documents\\ChatGPT\\GSPro-Courses\\artifacts\\backups\\blue-tees-20260912",
+  "version": "0.5.0-beta.2",
+  "sourceCommit": "178608d54e1d128a2d014ee14d80b3e20042e858",
+  "installedUtc": "2026-09-30T21:48:03.8483986Z",
+  "packageSha256": "C9DFAFF4A656ECA5181F2D39177FFF3AEA4493C32FEBD5485E3439C56F73C812",
+  "gkdSha256": "A531D644C276F8AB68A4C9B1079D8346A29A1D6EC5C39CC5D076EEAFCCFADDCE",
+  "backupDirectory": "C:\\Users\\mac32\\Documents\\ChatGPT\\GSPro-Courses\\artifacts\\backups\\field-photo-two-tees-20260930",
+  "databaseBackup": "C:\\Users\\mac32\\Documents\\ChatGPT\\GSPro-Courses\\artifacts\\backups\\field-photo-two-tees-20260930\\GSPro.db",
   "destination": "C:\\GSProV1\\Core\\GSP\\Courses\\Stonehill_9H",
-  "gsproPlaytest": "Awaiting user",
-  "runtimeInspection": "Pending",
-  "bundleSourceCommit": "97f8ad3c9c9fd356f61d23043fd125c14b25e1dc",
-  "note": "Metadata-only Blue tee rename; encrypted bundle unchanged. Reload GSPro to display new tee labels.",
-  "rollbackHashes": [
+  "installedHashes": [
     {
-      "file": "coursedetails.txt",
-      "sha256": "78C38DE3A622727111FAF3FFFDE84ACE922F1CD29C391B6D194D927A214AE2C7"
-    },
-    {
-      "file": "GSPro.db",
-      "sha256": "588374C3ED6B4EFBD5879209FDE522E3E3D22BF134FC8852F076D660F3B1BB77"
+      "file": "Stonehill_9H.gspcrse",
+      "sha256": "C9DFAFF4A656ECA5181F2D39177FFF3AEA4493C32FEBD5485E3439C56F73C812"
     },
     {
       "file": "Stonehill_9H.GKD",
-      "sha256": "6B4410E679A74E67819D0DDA7FAAC7E585779027E3912E4251E3B65E9D1FBFA7"
-    },
-    {
-      "file": "Stonehill_9H.gspcrse",
-      "sha256": "05541DDFF1FF9903DBF2C72A24FE78CEA33CE2E4A1BEBA6861F62657849FB121"
+      "sha256": "A531D644C276F8AB68A4C9B1079D8346A29A1D6EC5C39CC5D076EEAFCCFADDCE"
     },
     {
       "file": "stonehill-release.json",
-      "sha256": "8BE6BEB5CBE287C24081BEAFB98C9703FB8BCF5072C67457F29B2AEA5166A4F1"
+      "sha256": "FEBF6A8C3823471CFDF5D0C75628ACF4577D862F78141A079347BD933894F0D5"
+    },
+    {
+      "file": "coursedetails.txt",
+      "sha256": "13BB2686E9D6959027DC94CBF25C278EFC223304F765DE38ED3B81599BED9E1C"
+    },
+    {
+      "file": "splash template.jpg",
+      "sha256": "8639D6C911970D1F475F40C834C1807FAC0EB9DB68AD2B4958C6BE4E0B8CD2E1"
+    },
+    {
+      "file": "image_altered_480_270splash template.jpg",
+      "sha256": "8639D6C911970D1F475F40C834C1807FAC0EB9DB68AD2B4958C6BE4E0B8CD2E1"
     }
-  ]
+  ],
+  "gsproPlaytest": "Awaiting user",
+  "runtimeInspection": "Pending",
+  "databaseVersion": "0.5.0-beta.2",
+  "databaseMetadataSyncedUtc": "2026-09-30T21:51:02.3604443Z",
+  "databaseBackupSha256": "A5D1EB99592F1BC260647B5815514C35E21BAD4424748552BA966E2EB580D6C0"
 }
