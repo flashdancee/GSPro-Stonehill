@@ -2,12 +2,12 @@
 
 > **Current source checkpoint (September 27, 2026):** The front nine has been
 > rebuilt from 45 geotagged on-course photos, photographed hole signs and the
-> registered orthophoto. Black and Red men's markers share one tee position;
-> Yellow marks the women's position. Photo-backed routing, visual cart tracks
-> and denser woodland are in source control. This is a review build pending
+> registered orthophoto. GSPro offers two tees: Red at the shared red/black
+> men's position, and Yellow at the women's position. Photo-backed routing,
+> visual cart tracks and denser woodland are in source control. This is a review build pending
 > GSPro shot and putting tests, especially on the inferred greens of 3, 6 and 9.
 
-The latest source release is `0.5.0-beta.1`; the installed GSPro build has not been changed by this branch.
+The latest release is `0.5.0-beta.2`; its two-tee course is installed locally for GSPro testing.
 Release identity is stored in `CourseRelease.json`; release notes are in
 `CHANGELOG.md`. The packaging script embeds that manifest in its output, and
 `Scripts/sync-gspro-course-metadata.ps1` populates the Version and Date Updated

@@ -1,8 +1,8 @@
-# Field-sign yardage audit — September 27, 2026
+# Field-sign yardage audit — September 30, 2026
 
-Stored GSPro Black and Red markers share the men's tee coordinate and distance. Yellow uses the separate women's tee. The distances below are measured horizontally from each tee through the exported aim points to each of four pins, then converted to yards. They verify the current route geometry against the photographed signs; Hole 4 uses the scorecard because its sign was not photographed.
+The photographed Black and Red markers share the men's position; GSPro exposes it once as Red. Yellow uses the separate women's position. The distances below are measured horizontally from each tee through the exported aim points to each of four pins, then converted to yards. They verify the current route geometry against the photographed signs; Hole 4 uses the scorecard because its sign was not photographed.
 
-| Hole | Men sign/stored yd | Black/Red route yd | Women sign/stored yd | Yellow route yd | Largest difference |
+| Hole | Men sign/stored yd | Red route yd | Women sign/stored yd | Yellow route yd | Largest difference |
 |---|---:|---:|---:|---:|---:|
 | 1 | 446 | 456.1–460.2 | 388 | 392.0–396.1 | 3.18% |
 | 2 | 308 | 304.3–308.1 | 272 | 273.0–276.9 | 1.79% |

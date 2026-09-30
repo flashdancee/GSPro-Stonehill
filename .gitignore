@@ -44,3 +44,6 @@ Reviews/**/before-*.png
 
 # User's archived camera originals stay local; the named JPG set is the review source.
 /Source-Pictures/Original-HEIC/
+
+# Metadata export generates this exact copy of the tracked splash image.
+/GSPro/Stonehill_9H/image_altered_480_270splash template.jpg

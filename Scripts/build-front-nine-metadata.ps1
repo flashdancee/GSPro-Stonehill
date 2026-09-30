@@ -117,14 +117,14 @@ for ($hole = 1; $hole -le 18; $hole++) {
         ((($pins | ForEach-Object { $_.Position.z } | Measure-Object -Average).Average) + 0.3)
 
     $tees = @(
-        (New-TeeRecord 'Black' $true ($whiteYards[$hole - 1] * 0.9144) $white),
-        (New-TeeRecord 'White' $true 0 $null),
-        (New-TeeRecord 'Green' $true 0 $null),
-        (New-TeeRecord 'Blue' $true 0 $null),
+        (New-TeeRecord 'Black' $false 0 $null),
+        (New-TeeRecord 'White' $false 0 $null),
+        (New-TeeRecord 'Green' $false 0 $null),
+        (New-TeeRecord 'Blue' $false 0 $null),
         (New-TeeRecord 'Yellow' $true ($redYards[$hole - 1] * 0.9144) $red),
         (New-TeeRecord 'Red' $true ($whiteYards[$hole - 1] * 0.9144) $white),
-        (New-TeeRecord 'Junior' $true 0 $null),
-        (New-TeeRecord 'Par3' $true 0 $null)
+        (New-TeeRecord 'Junior' $false 0 $null),
+        (New-TeeRecord 'Par3' $false 0 $null)
     )
     $holeAims = $aims[$hole - 1]
     $aim1 = New-Position $holeAims.A1[0] $center.y $holeAims.A1[1]
@@ -160,9 +160,9 @@ foreach ($polygon in $hazardPolygons) {
 $gkd = [ordered]@{}
 foreach ($property in $template.PSObject.Properties) { $gkd[$property.Name] = $property.Value }
 # Legacy Unity White/Red names identify men's/women's positions.
-# Black and Red are colocated men's markers; Yellow is the women's marker.
+# The photographed Black/Red men's position is one Red GSPro choice; Yellow is the women's choice.
 $gkd.YellowSR = $gkd.RedSR
-$gkd.BlackSR = $gkd.WhiteSR
+$gkd.BlackSR = '0.0/0'
 $gkd.RedSR = $gkd.WhiteSR
 $gkd.BlueSR = '0.0/0'
 $gkd.WhiteSR = '0.0/0'
@@ -173,7 +173,7 @@ $gkd.DescriptionTxtFileName = ''
 $gkd.CoursePar = 34
 $gkd.par = 34
 $gkd.hazardCount = $hazards.Count
-$gkd.teeTypeCount = 3
+$gkd.teeTypeCount = 2
 $gkd.pOOB = [ordered]@{
     pointCount = 4
     coords = @(
@@ -185,14 +185,14 @@ $gkd.CourseInfo = 'Front-nine reconstruction using 45 on-course photos, photogra
 $gkd.Holes = $holes
 $gkd.Hazards = $hazards
 $gkd.TeeTypeTotalDistance = @(
-    (New-TeeRecord 'Black' $true (($whiteYards | Measure-Object -Sum).Sum * 0.9144) $null),
-    (New-TeeRecord 'White' $true 0 $null),
-    (New-TeeRecord 'Green' $true 0 $null),
-    (New-TeeRecord 'Blue' $true 0 $null),
+    (New-TeeRecord 'Black' $false 0 $null),
+    (New-TeeRecord 'White' $false 0 $null),
+    (New-TeeRecord 'Green' $false 0 $null),
+    (New-TeeRecord 'Blue' $false 0 $null),
     (New-TeeRecord 'Yellow' $true (($redYards | Measure-Object -Sum).Sum * 0.9144) $null),
     (New-TeeRecord 'Red' $true (($whiteYards | Measure-Object -Sum).Sum * 0.9144) $null),
-    (New-TeeRecord 'Junior' $true 0 $null),
-    (New-TeeRecord 'Par3' $true 0 $null)
+    (New-TeeRecord 'Junior' $false 0 $null),
+    (New-TeeRecord 'Par3' $false 0 $null)
 )
 
 New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
@@ -207,7 +207,7 @@ if (Test-Path -LiteralPath $refinedBoundaryPath) {
 $details = (Get-Content -Raw -LiteralPath $templateDetailsPath).Trim().Split('|')
 $details[0] = $courseName
 $details[1] = 'Stonehill / Codex GIS-first beta'
-$details[3] = 'A rebuilt front-nine beta with annotated routing, official yardages, smoothed greens and tees, and mapped water hazards.'
+$details[3] = 'A photo-guided front-nine beta with on-course sign yardages, two selectable tees, smoothed greens and mapped water hazards.'
 $details[7] = '34'
 for ($i = 0; $i -lt 18; $i++) {
     $details[8 + $i] = if ($i -lt 9) { [string]$pars[$i] } else { '0' }
